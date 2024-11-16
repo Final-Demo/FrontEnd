@@ -1,39 +1,34 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';  // Import the Navbar component
-import Home from './pages/Home';          // Import Home page
-import Auth from './pages/Auth';
-import AddPropertyForm from './components/properties/AddPropertyForm';
-import Dashboard from './components/dashboard/Dashboard';
-import Profile from './components/dashboard/Profile';
-import MyProperties from './components/dashboard/MyProperties';
-import Footer from './components/Footer';
-import Header from './components/Header';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import Navbar from './components/Navbar';
+import ApartmentListing from './components/ApartmentListing';
+import UserDashboardLayout from './layouts/UserDashboardLayout';
+import DashboardSettings from './pages/DashboardSettings';
+import ApartmentDetails from './components/ApartmentDetail';
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <Header/>
-      {/* Navbar appears at the top of the page */}
       <Navbar />
+      <Routes>
+        {/* Main routes */}
+        <Route path="/" element={<HomePage />} />
 
-      {/* Main Content */}
-      <div className="container mx-auto mt-6">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/addproperty" element={<AddPropertyForm />} />
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="profile" element={<Profile />} /> {/* Nested Profile route */}
-            <Route path="myproperties" element={<MyProperties />} /> {/* Nested MyProperties route */}
-          </Route>
-        </Routes>
-      </div>
+        {/* Dashboard route with nested routes */}
+        <Route path="/dashboard" element={<UserDashboardLayout />}>
+          {/* Nested route for settings */}
+          <Route path="settings" element={<DashboardSettings />} />
 
-      {/* Footer appears at the bottom of the page on all routes */}
-      <Footer />
+          {/* Apartment listing route */}
+          <Route path="apartmentlist" element={<ApartmentListing />} />
+
+          {/* Nested route for apartment details with dynamic id */}
+          <Route path="apartmentdetail/:id" element={<ApartmentDetails />} />
+        </Route>
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
