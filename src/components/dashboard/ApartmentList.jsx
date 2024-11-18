@@ -66,7 +66,7 @@ const ViewModeToggle = ({ viewMode, setViewMode }) => {
 // Child Component: Property Card
 const PropertyCard = ({ property }) => {
   // Ensure a fallback image if property.image is undefined or null
-  const imageUrl = property.image || '/path/to/default-image.jpg';
+  const imageUrl = property.image || 'https://savefiles.org/secure/uploads/21045?shareable_link=511';
 
   return (
     <Link
@@ -99,7 +99,7 @@ const ErrorMessage = ({ error }) => {
   return <div className="text-red-500 text-center mb-6">{error}</div>;
 };
 
-const ApartmentListing = ({ children }) => {
+const ApartmentList = ({ children }) => {
   const [properties, setProperties] = useState([]);
   const [search, setSearch] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
@@ -184,4 +184,4 @@ const ApartmentListing = ({ children }) => {
   );
 };
 
-export default ApartmentListing;
+export default ApartmentList;

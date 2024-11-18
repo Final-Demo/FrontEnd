@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // Import scroll icons
 import { apiGetApartments } from '../services/apartments'; // Import the API function
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
-const HomePage = () => {
+const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('apartments');
   const [apartments, setApartments] = useState([]); // State to hold fetched apartments
   const [filteredApartments, setFilteredApartments] = useState([]); // State for filtered apartments
@@ -19,12 +20,19 @@ const HomePage = () => {
 
       try {
         const response = await apiGetApartments(); // Fetch data from API
-        console.log(response); // Log the response to see the data structure
-        setApartments(response); // Set apartments to state (assuming the response is the apartment array)
-        setFilteredApartments(response); // Initially show all apartments
+        console.log('Fetched apartments:', response);  // Log the entire response to see the data structure
+
+        // Check if response data contains 'apartment' field and it is an array
+        if (Array.isArray(response.apartment)) {
+          setApartments(response.apartment); // Set apartments to state (assuming apartments are in the 'apartment' field)
+          setFilteredApartments(response.apartment); // Initially show all apartments
+        } else {
+          setError('Invalid data received from the server.');
+          setFilteredApartments([]);
+        }
       } catch (err) {
         setError('Failed to fetch apartments. Please try again later.'); // Set error message if fetch fails
-        console.error(err); // Log the error for debugging
+        console.error('API fetch error:', err); // Log the error for debugging
       } finally {
         setLoading(false); // Set loading to false after the fetch is complete
       }
@@ -82,7 +90,7 @@ const HomePage = () => {
       </nav>
 
       {/* Hero Section with Horizontal Scrolling */}
-      <section className="relative w-full h-[100vh] overflow-hidden"> {/* Increased height to 100vh */}
+      <section className="relative w-full h-[100vh] overflow-hidden">
         <div className="flex space-x-4 overflow-x-auto pb-4" ref={containerRef}>
           {/* Add image URLs for scrolling */}
           <div className="flex-shrink-0 w-full h-full">
@@ -172,26 +180,32 @@ const HomePage = () => {
 
           {/* Apartment Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {filteredApartments.map((apartment, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-              >
-                <img
-                  src={`https://savefiles.org/secure/uploads/21045?shareable_link=511/${apartment.images[0]}`} // Use the first image from the images array
-                  alt={apartment.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800">{apartment.title}</h3>
-                  <p className="text-lg text-gray-600 mb-4">${apartment.price}</p>
-                  <p className="text-sm text-gray-500 mb-4">{apartment.location}</p>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200">
-                    View Details
-                  </button>
+            {filteredApartments && filteredApartments.length > 0 ? (
+              filteredApartments.map((apartment, index) => (
+                <div
+                  key={index}
+                  className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  <img
+                    src={'https://savefiles.org/secure/uploads/21045?shareable_link=511'}
+                    alt={apartment.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-gray-800">{apartment.title}</h3>
+                    <p className="text-lg text-gray-600 mb-4">${apartment.price}</p>
+                    <p className="text-sm text-gray-500 mb-4">{apartment.location}</p>
+                    <Link 
+                    to={`/apartmentdetail/${apartment.id}`} // Use apartment id in the URL
+                    className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200">
+                      View Details
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div>No apartments available.</div>
+            )}
           </div>
         </div>
       </section>
@@ -199,4 +213,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;
