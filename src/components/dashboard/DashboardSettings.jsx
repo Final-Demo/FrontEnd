@@ -2,12 +2,8 @@ import React from 'react'
 
 const DashboardSettings = () => {
   return (
-    <div>
-        <h1>
-            Dashboard Settings
-        </h1>
-    </div>
+    <div>DashboardSettings</div>
   )
-};
+}
 
 export default DashboardSettings;

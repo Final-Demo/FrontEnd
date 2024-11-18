@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiAddProperty } from '../../services/apartments'; // Assuming you have an apiAddProperty function
 
-const AddProperty = () => {
+const AddApartmentForm = () => {
   // State to hold form data
   const [formData, setFormData] = useState({
     title: '',
@@ -267,4 +267,4 @@ const AddProperty = () => {
   );
 };
 
-export default AddProperty;
+export default AddApartmentForm;
