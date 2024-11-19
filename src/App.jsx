@@ -6,24 +6,25 @@ import Footer from "./layout/Footer";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPassword from "./components/auth/ForgotPassword"; // Import ForgotPassword component
+import ResetPassword from "./components/auth/ResetPassword"; // Import ResetPassword component
 import ApartmentList from "./components/dashboard/ApartmentList";
-import ApartmentDetails from "./components/dashboard/ApartmentDetails"; 
-import UserDashboard from "./components/dashboard/UserDashboard"; 
-import SearchBar from "./components/search/SearchBar";
-import FilterSidebar from "./components/search/FilterSidebar";
+import ApartmentDetails from "./components/dashboard/ApartmentDetails";
+import UserDashboard from "./components/dashboard/UserDashboard";
+import AddApartmentForm from "./pages/AddApartment";  // Import the AddApartmentForm component
+// import SearchBar from "./components/search/SearchBar";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ErrorMessage from "./components/common/ErrorMessage";
 import SuccessMessage from "./components/common/SuccessMessage";
 import Modal from "./components/common/Modal";
 import DashboardLayout from "./layout/DashboardLayout";
 
-// AppContent will handle rendering the routes and conditional layout
 const AppContent = () => {
   const location = useLocation(); // Get current route location
 
   // Check if the current route is a dashboard-related route or login/register
   const isDashboardRoute = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/apartmentlist');
-  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname === '/reset-password/:token';
 
   return (
     <>
@@ -39,6 +40,12 @@ const AppContent = () => {
         {/* Main Routes */}
         <Route path="/" element={<Home />} />
 
+        {/* Authentication Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
         {/* Dashboard Layout (without Header, Navbar, and Footer) */}
         <Route path="/dashboardlay" element={<DashboardLayout />} />
 
@@ -48,15 +55,11 @@ const AppContent = () => {
         {/* Apartment Details */}
         <Route path="/apartmentdetail/:id" element={<ApartmentDetails />} />
 
-        {/* Authentication Routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Add Apartment Route */}
+        <Route path="/add-apartment" element={<AddApartmentForm />} />  {/* New route for adding apartment */}
 
         {/* User Dashboard */}
         <Route path="/udashboard" element={<UserDashboard />} />
-
-        {/* Search Routes */}
-        <Route path="/search" element={<div><SearchBar /><FilterSidebar /></div>} />
 
         {/* Common Components */}
         <Route path="/loading" element={<LoadingSpinner />} />

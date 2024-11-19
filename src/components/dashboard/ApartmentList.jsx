@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaTh, FaList } from 'react-icons/fa'; // Import icons
+import { FaTh, FaList, FaHeart } from 'react-icons/fa'; // Import icons
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import axios from 'axios'; // For API requests
 
 // Child Component: Search and Filter
 const SearchAndFilter = ({ search, setSearch, priceFilter, setPriceFilter, bedroomFilter, setBedroomFilter }) => {
@@ -44,15 +45,12 @@ const SearchAndFilter = ({ search, setSearch, priceFilter, setPriceFilter, bedro
 const ViewModeToggle = ({ viewMode, setViewMode }) => {
   return (
     <div className="flex space-x-4 items-center">
-      {/* Toggle Grid View Icon */}
       <button
         onClick={() => setViewMode('grid')}
         className={`p-2 rounded-full ${viewMode === 'grid' ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
       >
         <FaTh size={24} />
       </button>
-
-      {/* Toggle List View Icon */}
       <button
         onClick={() => setViewMode('list')}
         className={`p-2 rounded-full ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
@@ -64,18 +62,16 @@ const ViewModeToggle = ({ viewMode, setViewMode }) => {
 };
 
 // Child Component: Property Card
-const PropertyCard = ({ property }) => {
-  // Ensure a fallback image if property.image is undefined or null
+const PropertyCard = ({ property, isFavourite, onToggleFavourite }) => {
   const imageUrl = property.image || 'https://savefiles.org/secure/uploads/21045?shareable_link=511';
 
   return (
     <Link
-      key={property.id}
       to={`/apartdetail/${property.id}`} // Link to the ApartmentDetail page with the apartment id
       className="bg-white rounded-lg shadow-lg"
     >
       <img
-        src={imageUrl} // Example image URL, replace with property.image if needed
+        src={imageUrl}
         alt={property.name}
         className="w-full h-56 object-cover rounded-t-lg"
       />
@@ -84,6 +80,17 @@ const PropertyCard = ({ property }) => {
         <p className="text-gray-500">{property.location}</p>
         <p className="text-green-600 font-semibold">${property.price.toLocaleString()}</p>
         <p className="text-gray-600">Bedrooms: {property.bedrooms}</p>
+
+        {/* Add to Favourite Button (Heart Icon) */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavourite(property.id, isFavourite);
+          }}
+          className={`text-xl ${isFavourite ? 'text-red-500' : 'text-gray-500'}`}
+        >
+          <FaHeart />
+        </button>
       </div>
     </Link>
   );
@@ -105,13 +112,14 @@ const ApartmentList = ({ children }) => {
   const [priceFilter, setPriceFilter] = useState('');
   const [bedroomFilter, setBedroomFilter] = useState('');
   const [viewMode, setViewMode] = useState('grid');
-  const [loading, setLoading] = useState(true);  // Loading state
-  const [error, setError] = useState(null);      // Error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [favourites, setFavourites] = useState([]); // State for favourites
 
-  // Function to fetch properties
+  // Fetch properties
   const fetchProperties = async () => {
     setLoading(true);
-    setError(null);  // Reset error state on every fetch attempt
+    setError(null);
     try {
       const response = await fetch('https://backend-xl0o.onrender.com/apartments');
       if (!response.ok) {
@@ -126,13 +134,48 @@ const ApartmentList = ({ children }) => {
     }
   };
 
-  // Fetch properties when the component mounts
+  // Fetch favourites
+  const fetchFavourites = async () => {
+    try {
+      const response = await axios.get('/api/favourites');
+      
+      // Ensure the response is an array and map over it
+      if (Array.isArray(response.data)) {
+        setFavourites(response.data.map(fav => fav.id)); // Assuming the response has 'id' property
+      } else {
+        console.error('Unexpected format for favourites:', response.data);
+        setFavourites([]);
+      }
+    } catch (err) {
+      console.error('Error fetching favourites:', err);
+    }
+  };
+
+  // Toggle favourite status
+  const handleToggleFavourite = async (apartmentId, isFavourite) => {
+    try {
+      if (isFavourite) {
+        // Remove from favourites
+        await axios.delete(`/api/favourite/${apartmentId}`);
+        setFavourites(favourites.filter(id => id !== apartmentId));
+      } else {
+        // Add to favourites
+        await axios.post('/api/favourite', { apartmentId });
+        setFavourites([...favourites, apartmentId]);
+      }
+    } catch (err) {
+      console.error('Error updating favourites:', err);
+    }
+  };
+
+  // Fetch data on component mount
   useEffect(() => {
     fetchProperties();
+    fetchFavourites(); // Fetch favourites after properties are fetched
   }, []);
 
+  // Filter properties based on search and filters
   const filteredProperties = properties.filter((property) => {
-    // Ensure property.name and property.location are not undefined or null
     const matchesSearch =
       (property.name && property.name.toLowerCase().includes(search.toLowerCase())) ||
       (property.location && property.location.toLowerCase().includes(search.toLowerCase()));
@@ -145,7 +188,6 @@ const ApartmentList = ({ children }) => {
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
-      {/* Header */}
       <header className="text-center mb-6">
         <h1 className="text-4xl font-bold">Property Listings</h1>
       </header>
@@ -172,7 +214,14 @@ const ApartmentList = ({ children }) => {
       ) : (
         <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6' : 'space-y-6'}>
           {filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => <PropertyCard key={property.id} property={property} />)
+            filteredProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                isFavourite={favourites.includes(property.id)} // Check if the property is a favourite
+                onToggleFavourite={handleToggleFavourite}
+              />
+            ))
           ) : (
             <p>No apartments found.</p>
           )}
