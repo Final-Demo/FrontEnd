@@ -77,15 +77,7 @@ const Home = () => {
       {/* Navbar */}
       <nav className="bg-white shadow-md">
         <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
-          <h1 className="text-xl font-semibold text-gray-800">Apartment Finder</h1>
-          <div className="flex space-x-6">
-            <button
-              onClick={() => setSelectedCategory('apartments')}
-              className={`text-lg font-medium ${selectedCategory === 'apartments' ? 'text-blue-500' : 'text-gray-600'}`}
-            >
-              Apartments
-            </button>
-          </div>
+          <h1 className="text-xl font-semibold text-gray-800"></h1>
         </div>
       </nav>
 
@@ -160,6 +152,14 @@ const Home = () => {
             >
               All Properties
             </button>
+
+            {/* Add Property Link */}
+            <Link
+              to="/add-property"
+              className="mt-4 inline-block bg-yellow-500 text-white py-2 px-6 rounded-full hover:bg-yellow-600 transition-colors duration-200"
+            >
+              Add Property
+            </Link>
           </div>
         </div>
       </section>
@@ -196,8 +196,9 @@ const Home = () => {
                     <p className="text-lg text-gray-600 mb-4">${apartment.price}</p>
                     <p className="text-sm text-gray-500 mb-4">{apartment.location}</p>
                     <Link 
-                    to={`/apartmentdetail/${apartment.id}`} // Use apartment id in the URL
-                    className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200">
+                      to={`/apartmentdetail/${apartment.id}`} // Use apartment id in the URL
+                      className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200"
+                    >
                       View Details
                     </Link>
                   </div>
