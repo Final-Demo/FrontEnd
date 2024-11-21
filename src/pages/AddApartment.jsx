@@ -1,307 +1,277 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
+// The AddApartment component
 const AddApartment = () => {
-  const [formData, setFormData] = useState({
+  const [apartment, setApartment] = useState({
     title: '',
     description: '',
     location: '',
     price: '',
     images: [],
-    category: 'apartment',
+    category: '',
     amenities: [],
-    status: 'available',
+    status: '',
     features: {
       isFurnished: false,
-      isParkingAvailable: false,
-      isAirConditionerAvailable: false,
-    },
-    isApproved: false,
+    }
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState(null);
 
-  // Handle form field changes
+  // Assuming the token is stored in localStorage
+  const token = localStorage.getItem("authToken"); // Adjust this if you are storing the token elsewhere
+
+  // Handle form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === 'isFurnished') {
+      setApartment((prevState) => ({
+        ...prevState,
+        features: {
+          ...prevState.features,
+          isFurnished: e.target.checked
+        }
+      }));
+    } else {
+      setApartment((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      features: {
-        ...prevData.features,
-        [name]: checked,
-      },
-    }));
-  };
-
+  // Handle amenities change (multiple checkboxes)
   const handleAmenityChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    const { value, checked } = e.target;
+    setApartment((prevState) => ({
+      ...prevState,
       amenities: checked
-        ? [...prevData.amenities, name]
-        : prevData.amenities.filter((amenity) => amenity !== name),
+        ? [...prevState.amenities, value]
+        : prevState.amenities.filter((amenity) => amenity !== value),
+    }));
+  };
+
+  // Handle image file input change (multiple images)
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
+    setApartment((prevState) => ({
+      ...prevState,
+      images: imagesArray,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess('');
-
-    // Validate that required fields are filled
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.location ||
-      !formData.price ||
-      formData.images.length === 0
-    ) {
-      setLoading(false);
-      setError('Please fill out all required fields.');
-      return;
-    }
+    setError(null);
 
     try {
-      const formPayload = new FormData();
-
-      formPayload.append('title', formData.title);
-      formPayload.append('description', formData.description);
-      formPayload.append('location', formData.location);
-      formPayload.append('price', formData.price);
-      formPayload.append('category', formData.category);
-      formPayload.append('status', formData.status);
-      formPayload.append('isApproved', formData.isApproved);
-
-      // Add amenities
-      formData.amenities.forEach((amenity, index) => {
-        formPayload.append(`amenities[${index}]`, amenity);
-      });
-
-      // Add features
-      Object.keys(formData.features).forEach((key) => {
-        formPayload.append(`features[${key}]`, formData.features[key]);
-      });
-
-      // Add images (Ensure images is an array)
-      Array.from(formData.images).forEach((image) => {
-        formPayload.append('images', image);
-      });
-
-      // Get the token from localStorage or sessionStorage (assuming JWT)
-      const token = localStorage.getItem('authToken');
-
       if (!token) {
-        setLoading(false);
-        setError('You are not logged in. Please log in and try again.');
-        return;
+        throw new Error("You are not logged in. Please log in again.");
       }
 
-      // Send the POST request with the token in the Authorization header
-      const { data } = await axios.post(
-        'https://backend-xl0o.onrender.com/apartments',
-        formPayload,
+      // Create FormData to send along with the POST request
+      const formData = new FormData();
+      formData.append("title", apartment.title);
+      formData.append("description", apartment.description);
+      formData.append("location", apartment.location);
+      formData.append("price", apartment.price);
+      formData.append("category", apartment.category);
+      formData.append("status", apartment.status);
+      formData.append("isFurnished", apartment.features.isFurnished);
+
+      // Append amenities as a comma-separated string
+      formData.append("amenities", apartment.amenities.join(","));
+
+      // Append image files
+      for (let i = 0; i < e.target.images.files.length; i++) {
+        formData.append("images", e.target.images.files[i]);
+      }
+
+      // Send the POST request with the authorization token in the header
+      const response = await axios.post(
+        "https://backend-xl0o.onrender.com/apartments",
+        formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Include the token here
           },
         }
       );
 
-      setLoading(false);
-      setSuccess('Apartment added successfully!');
-      setFormData({
-        title: '',
-        description: '',
-        location: '',
-        price: '',
-        images: [],
-        category: 'apartment',
-        amenities: [],
-        status: 'available',
-        features: {
-          isFurnished: false,
-          isParkingAvailable: false,
-          isAirConditionerAvailable: false,
-        },
-        isApproved: false,
-      });
+      // Check if the response is successful
+      if (response.status === 201) {
+        alert("Apartment added successfully!");
+        // Reset the form if needed
+        setApartment({
+          title: '',
+          description: '',
+          location: '',
+          price: '',
+          images: [],
+          category: '',
+          amenities: [],
+          status: '',
+          features: { isFurnished: false },
+        });
+      }
     } catch (error) {
+      console.error("Error posting apartment:", error);
+      setError("There was an error adding the apartment. Please try again.");
+    } finally {
       setLoading(false);
-      setError('Failed to add apartment. Please try again.');
-      console.error('Error adding apartment:', error.response ? error.response.data : error);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-semibold text-center mb-6">Add Apartment</h2>
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+      {error && <p className="text-red-500 text-center">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title:</label>
-          <input
-            id="title"
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-        </div>
+      <div className="flex flex-col">
+        <label htmlFor="title" className="font-medium text-gray-700">Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={apartment.title}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-        </div>
+      <div className="flex flex-col">
+        <label htmlFor="description" className="font-medium text-gray-700">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          value={apartment.description}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location:</label>
-          <input
-            id="location"
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleInputChange}
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-        </div>
+      <div className="flex flex-col">
+        <label htmlFor="location" className="font-medium text-gray-700">Location</label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          value={apartment.location}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price:</label>
-          <input
-            id="price"
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-        </div>
+      <div className="flex flex-col">
+        <label htmlFor="price" className="font-medium text-gray-700">Price</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          value={apartment.price}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="images" className="block text-sm font-medium text-gray-700">Images:</label>
-          <input
-            id="images"
-            type="file"
-            name="images"
-            onChange={(e) => setFormData({ ...formData, images: e.target.files })}
-            multiple
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          />
-        </div>
+      <div className="flex flex-col">
+        <label htmlFor="category" className="font-medium text-gray-700">Category</label>
+        <select
+          id="category"
+          name="category"
+          value={apartment.category}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="house">House</option>
+          <option value="apartment">Apartment</option>
+          <option value="studio">Studio</option>
+          <option value="shed">Shed</option>
+        </select>
+      </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Amenities:</label>
-          <div className="flex space-x-4">
-            <div>
-              <input
-                type="checkbox"
-                name="amenity1"
-                onChange={handleAmenityChange}
-                className="mr-2"
-              />
-              <label>Amenity 1</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                name="amenity2"
-                onChange={handleAmenityChange}
-                className="mr-2"
-              />
-              <label>Amenity 2</label>
-            </div>
+      <div className="flex flex-col">
+        <label className="font-medium text-gray-700">Amenities</label>
+        <div className="space-y-2">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              value="Garden"
+              checked={apartment.amenities.includes("Garden")}
+              onChange={handleAmenityChange}
+              className="mr-2"
+            />
+            <label>Garden</label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              value="Playground"
+              checked={apartment.amenities.includes("Playground")}
+              onChange={handleAmenityChange}
+              className="mr-2"
+            />
+            <label>Playground</label>
           </div>
         </div>
+      </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Features:</label>
-          <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="isFurnished"
-                checked={formData.features.isFurnished}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Furnished
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="isParkingAvailable"
-                checked={formData.features.isParkingAvailable}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Parking Available
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="isAirConditionerAvailable"
-                checked={formData.features.isAirConditionerAvailable}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              Air Conditioner Available
-            </label>
-          </div>
+      <div className="flex flex-col">
+        <label htmlFor="status" className="font-medium text-gray-700">Status</label>
+        <select
+          id="status"
+          name="status"
+          value={apartment.status}
+          onChange={handleInputChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="available">Available</option>
+          <option value="sold">Unavailable</option>
+        </select>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          name="isFurnished"
+          checked={apartment.features.isFurnished}
+          onChange={handleInputChange}
+          className="h-5 w-5 text-blue-500"
+        />
+        <label htmlFor="isFurnished" className="font-medium text-gray-700">Is this apartment furnished?</label>
+      </div>
+
+      <div className="flex flex-col">
+        <label htmlFor="images" className="font-medium text-gray-700">Images</label>
+        <input
+          type="file"
+          id="images"
+          name="images"
+          multiple
+          onChange={handleImageChange}
+          className="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+        />
+        <div className="mt-2 flex space-x-2">
+          {apartment.images.map((image, index) => (
+            <img key={index} src={image} alt={`apartment-img-${index}`} width="100" className="rounded-md" />
+          ))}
         </div>
+      </div>
 
-        <div className="mb-4">
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status:</label>
-          <select
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            required
-            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-          >
-            <option value="available">Available</option>
-            <option value="sold">Sold</option>
-          </select>
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
-          >
-            {loading ? 'Submitting...' : 'Submit'}
-          </button>
-        </div>
-      </form>
-
-      {error && <p className="text-red-600 text-center">{error}</p>}
-      {success && <p className="text-green-600 text-center">{success}</p>}
-    </div>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className={`px-6 py-2 ${loading ? 'bg-gray-400' : 'bg-blue-500'} text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`}
+          disabled={loading}
+        >
+          {loading ? "Adding..." : "Add Apartment"}
+        </button>
+      </div>
+    </form>
   );
 };
 

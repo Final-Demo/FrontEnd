@@ -38,14 +38,14 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-
+  
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
+  
     setLoading(true); // Show loading state
-
+  
     try {
       const response = await fetch("https://backend-xl0o.onrender.com/auth/login", {
         method: "POST",
@@ -54,22 +54,22 @@ const LoginPage = () => {
         },
         body: JSON.stringify(formData), // Sending form data as JSON
       });
-
+  
       const data = await response.json();
-
+  
       // Log the response for debugging
       console.log("API Response:", data);
-
+  
       if (response.ok) {
-        // If login is successful, show success toast
-        toast.success("Login successful! Redirecting to dashboard...");
-
-        // Store token or other user data (if needed)
-        // Example: localStorage.setItem("token", data.token);
-
+        // If login is successful, store the token in localStorage
+        localStorage.setItem("authToken", data.token);  // Store the token here
+  
+        // Show success toast
+        toast.success("Login successful! Redirecting to home...");
+  
         // Redirect to dashboard after 2 seconds (allowing the toast to show)
         setTimeout(() => {
-          navigate("/dashboardlay");
+          navigate("/");  // Redirect to homepage or dashboard
         }, 2000); // Redirect after 2 seconds
       } else {
         // If login fails, show error toast with message from API
@@ -82,7 +82,7 @@ const LoginPage = () => {
     } finally {
       setLoading(false); // Hide loading state after request completes
     }
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
