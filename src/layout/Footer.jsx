@@ -4,7 +4,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/f
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-12">
+    <footer className="bg-yellow-800 text-white py-12"> {/* Dark yellow background */}
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {/* Left Column: About Section */}
@@ -50,7 +50,7 @@ const Footer = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-300"
+                className="hover:text-yellow-500"
               >
                 <FaFacebookF />
               </a>
@@ -58,7 +58,7 @@ const Footer = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-300"
+                className="hover:text-yellow-500"
               >
                 <FaTwitter />
               </a>
@@ -66,7 +66,7 @@ const Footer = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-300"
+                className="hover:text-yellow-500"
               >
                 <FaInstagram />
               </a>
@@ -74,7 +74,7 @@ const Footer = () => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-gray-300"
+                className="hover:text-yellow-500"
               >
                 <FaLinkedinIn />
               </a>
@@ -89,7 +89,7 @@ const Footer = () => {
           </p>
           <Link
             to="/signup"
-            className="inline-block py-3 px-6 bg-purple-700 rounded-lg text-white font-semibold hover:bg-purple-800 transition-all"
+            className="inline-block py-3 px-6 bg-white rounded-lg text-black font-semibold hover:bg-purple-800 transition-all"
           >
             Join Now
           </Link>

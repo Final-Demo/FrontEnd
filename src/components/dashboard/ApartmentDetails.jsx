@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // To get the 'id' from the URL
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { apiGetApartmentById, apiAddToFavorite, apiRemoveFromFavorite, apiGetFavorites } from "../../services/apartments"; // Importing the service
 
 const ApartmentDetails = () => {
   const { id } = useParams(); // Get the apartment ID from the URL
+  const navigate = useNavigate(); // Initialize the useNavigate hook
   const [apartment, setApartment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -123,6 +124,15 @@ const ApartmentDetails = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      {/* Styled Back Arrow Button */}
+      <button
+        onClick={() => navigate(-1)} // Go back to the previous page
+        className="flex items-center text-gray-600 hover:text-gray-800 text-lg py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors duration-200 mb-4"
+      >
+        <i className="fas fa-arrow-left mr-2"></i> {/* Arrow icon */}
+        Back
+      </button>
+
       <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
       <p className="text-lg text-gray-600 mb-4">{location}</p>
       <p className="text-lg text-gray-900 mb-6">${price}</p>
@@ -222,7 +232,7 @@ const ApartmentDetails = () => {
               </button>
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-500 text-white py-2 px-6 rounded-full hover:bg-gray-600 transition-colors duration-200"
+                className="bg-gray-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-200"
               >
                 Cancel
               </button>

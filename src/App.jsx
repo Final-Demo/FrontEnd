@@ -6,35 +6,32 @@ import Footer from "./layout/Footer";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ForgotPassword from "./components/auth/ForgotPassword"; // Import ForgotPassword component
-import ResetPassword from "./components/auth/ResetPassword"; // Import ResetPassword component
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 import ApartmentList from "./components/dashboard/ApartmentList";
 import ApartmentDetails from "./components/dashboard/ApartmentDetails";
 import UserDashboard from "./components/dashboard/UserDashboard";
-import AddApartmentForm from "./pages/AddApartment";  // Import the AddApartmentForm component
-// import SearchBar from "./components/search/SearchBar";
+import AddApartmentForm from "./pages/AddApartment";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ErrorMessage from "./components/common/ErrorMessage";
 import SuccessMessage from "./components/common/SuccessMessage";
 import Modal from "./components/common/Modal";
 import DashboardLayout from "./layout/DashboardLayout";
+import AboutUsPage from "../src/layout/AboutUs"; // Import About Us Page
 
 const AppContent = () => {
   const location = useLocation(); // Get current route location
 
-  // Check if the current route is a dashboard-related route or login/register
-  const isDashboardRoute = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/apartmentlist');
-  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname === '/reset-password/:token';
+  // Determine whether to render Navbar
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.startsWith('/reset-password');
 
   return (
     <>
-      {/* Conditionally render Header and Navbar only for non-login, non-register, and non-dashboard routes */}
-      {!isDashboardRoute && !isAuthRoute && (
-        <>
-          <Header />
-          <Navbar />
-        </>
-      )}
+      {/* Conditionally render Header only for Home page */}
+      {location.pathname === '/' && <Header />}
+
+      {/* Conditionally render Navbar only if not on authentication routes */}
+      {!isAuthRoute && <Navbar />}
 
       <Routes>
         {/* Main Routes */}
@@ -46,6 +43,9 @@ const AppContent = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
+        {/* About Us Route */}
+        <Route path="/about-us" element={<AboutUsPage />} /> {/* Add About Us Page Route */}
+
         {/* Dashboard Layout (without Header, Navbar, and Footer) */}
         <Route path="/dashboardlay" element={<DashboardLayout />} />
 
@@ -56,7 +56,7 @@ const AppContent = () => {
         <Route path="/apartmentdetail/:id" element={<ApartmentDetails />} />
 
         {/* Add Apartment Route */}
-        <Route path="/add-apartment" element={<AddApartmentForm />} />  {/* New route for adding apartment */}
+        <Route path="/add-apartment" element={<AddApartmentForm />} />
 
         {/* User Dashboard */}
         <Route path="/udashboard" element={<UserDashboard />} />
@@ -69,7 +69,7 @@ const AppContent = () => {
       </Routes>
 
       {/* Conditionally render Footer only for non-login, non-register, and non-dashboard routes */}
-      {!isDashboardRoute && !isAuthRoute && <Footer />}
+      {!isAuthRoute && <Footer />}
     </>
   );
 };
