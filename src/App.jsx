@@ -11,7 +11,6 @@ import ResetPassword from "./components/auth/ResetPassword";
 import ApartmentList from "./components/dashboard/ApartmentList";
 import ApartmentDetails from "./components/dashboard/ApartmentDetails";
 import UserDashboard from "./components/dashboard/UserDashboard";
-import AddApartmentForm from "./pages/AddApartment";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ErrorMessage from "./components/common/ErrorMessage";
 import SuccessMessage from "./components/common/SuccessMessage";
@@ -19,6 +18,7 @@ import Modal from "./components/common/Modal";
 import DashboardLayout from "./layout/DashboardLayout";
 import AboutUsPage from "../src/layout/AboutUs"; // Import About Us Page
 import AddApartment from "./pages/AddApartment";
+import EmailVerification from "../src/components/auth/EmailVerification"; // Import the email verification component
 
 const AppContent = () => {
   const location = useLocation(); // Get current route location
@@ -71,6 +71,9 @@ const AppContent = () => {
 
         {/* User Dashboard */}
         <Route path="/udashboard" element={<UserDashboard />} />
+
+        {/* Email Verification Route */}
+        <Route path="/verify-email/:token" element={<EmailVerification />} /> {/* Add this route */}
 
         {/* Common Components */}
         <Route path="/loading" element={<LoadingSpinner />} />

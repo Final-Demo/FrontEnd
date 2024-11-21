@@ -49,3 +49,23 @@ export const logoutUser = () => {
   Cookies.remove('authToken');
   console.log('User logged out');
 };
+
+// Function to verify email using the token
+export const verifyEmail = async (token) => {
+  try {
+    // Send GET request to backend to verify email with token
+    const response = await apiClient.get(`/verify-email/${token}`);
+    
+    // Handle successful verification
+    if (response.data.success) {
+      console.log('Email verified successfully:', response.data);
+      return response.data; // Return the success message or data
+    } else {
+      console.log('Email verification failed:', response.data.message);
+      throw new Error('Email verification failed. Please check the link and try again.');
+    }
+  } catch (error) {
+    console.error('Error verifying email:', error.response ? error.response.data : error.message);
+    throw new Error(error.response?.data?.message || 'An error occurred during email verification. Please try again.');
+  }
+};
