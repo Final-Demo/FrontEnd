@@ -18,20 +18,31 @@ import SuccessMessage from "./components/common/SuccessMessage";
 import Modal from "./components/common/Modal";
 import DashboardLayout from "./layout/DashboardLayout";
 import AboutUsPage from "../src/layout/AboutUs"; // Import About Us Page
+import AddApartment from "./pages/AddApartment";
 
 const AppContent = () => {
   const location = useLocation(); // Get current route location
 
-  // Determine whether to render Navbar
-  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.startsWith('/reset-password');
+  // Define routes where Navbar and Footer should NOT appear (e.g., authentication and dashboard routes)
+  const noNavbarFooterRoutes = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/dashboardlay',
+    '/udashboard', // Add all dashboard-related routes here
+  ];
+
+  // Check if the current route should not show Navbar or Footer
+  const shouldHideNavbarFooter = noNavbarFooterRoutes.some(route => location.pathname.startsWith(route));
 
   return (
     <>
       {/* Conditionally render Header only for Home page */}
       {location.pathname === '/' && <Header />}
 
-      {/* Conditionally render Navbar only if not on authentication routes */}
-      {!isAuthRoute && <Navbar />}
+      {/* Conditionally render Navbar only if not on authentication or dashboard routes */}
+      {!shouldHideNavbarFooter && <Navbar />}
 
       <Routes>
         {/* Main Routes */}
@@ -44,7 +55,7 @@ const AppContent = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* About Us Route */}
-        <Route path="/about-us" element={<AboutUsPage />} /> {/* Add About Us Page Route */}
+        <Route path="/about-us" element={<AboutUsPage />} />
 
         {/* Dashboard Layout (without Header, Navbar, and Footer) */}
         <Route path="/dashboardlay" element={<DashboardLayout />} />
@@ -56,7 +67,7 @@ const AppContent = () => {
         <Route path="/apartmentdetail/:id" element={<ApartmentDetails />} />
 
         {/* Add Apartment Route */}
-        <Route path="/add-apartment" element={<AddApartmentForm />} />
+        <Route path="/add-apartment" element={<AddApartment />} />
 
         {/* User Dashboard */}
         <Route path="/udashboard" element={<UserDashboard />} />
@@ -69,7 +80,7 @@ const AppContent = () => {
       </Routes>
 
       {/* Conditionally render Footer only for non-login, non-register, and non-dashboard routes */}
-      {!isAuthRoute && <Footer />}
+      {!shouldHideNavbarFooter && <Footer />}
     </>
   );
 };

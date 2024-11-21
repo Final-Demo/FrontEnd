@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaHome, FaList, FaPlusCircle, FaCalendarAlt, FaChartLine, FaEnvelope, FaUserCog, FaSignOutAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Correct import for React Router
 
 const Sidebar = () => {
   const [isSidebarHovered, setSidebarHovered] = useState(false);
@@ -31,52 +32,53 @@ const Sidebar = () => {
           {/* Sidebar Links */}
           <ul className="mt-8 space-y-4 w-full px-2">
             <li>
-              <a href="/dashboard" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/dashboard" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaHome className="mr-3" />
                 {isSidebarHovered && <span>Dashboard</span>}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/properties" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/properties" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaList className="mr-3" />
-                {isSidebarHovered && <span>My Properties</span>}
-              </a>
+                {isSidebarHovered && <span>My Apartments</span>}
+              </Link>
             </li>
             <li>
-              <a href="/add-property" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              {/* Use Link for navigation */}
+              <Link to="/add-property" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaPlusCircle className="mr-3" />
-                {isSidebarHovered && <span>Add Property</span>}
-              </a>
+                {isSidebarHovered && <span>Add Apartment</span>}
+              </Link>
             </li>
             <li>
-              <a href="/bookings" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/bookings" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaCalendarAlt className="mr-3" />
                 {isSidebarHovered && <span>Bookings</span>}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/analytics" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/analytics" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaChartLine className="mr-3" />
                 {isSidebarHovered && <span>Analytics</span>}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/messages" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/messages" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaEnvelope className="mr-3" />
                 {isSidebarHovered && <span>Messages</span>}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/profile" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/profile" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaUserCog className="mr-3" />
                 {isSidebarHovered && <span>Profile</span>}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/logout" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
+              <Link to="/logout" className="flex items-center p-3 rounded-lg hover:bg-gray-700">
                 <FaSignOutAlt className="mr-3" />
                 {isSidebarHovered && <span>Logout</span>}
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
