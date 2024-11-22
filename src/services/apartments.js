@@ -9,9 +9,12 @@ const getAuthToken = () => localStorage.getItem("authToken");
 
 // Fetch all apartments
 export const apiGetApartments = async () => {
+  const token = getAuthToken();
+  if (!token) throw new Error('Authentication token is missing.');
   try {
-    const response = await axios.get(API_URL);
-    console.log('Fetched apartments:', response.data);
+    const response = await axios.get(API_URL, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error("API fetch error:", error.response ? error.response.data : error.message);
@@ -21,9 +24,12 @@ export const apiGetApartments = async () => {
 
 // Fetch a single apartment by ID
 export const apiGetApartmentById = async (id) => {
+  const token = getAuthToken();
+  if (!token) throw new Error('Authentication token is missing.');
   try {
-    const response = await axios.get(`${API_URL}/${id}`);
-    console.log('Fetched apartment details:', response.data);
+    const response = await axios.get(`${API_URL}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error(`API fetch error for apartment ID ${id}:`, error.response ? error.response.data : error.message);
@@ -31,27 +37,27 @@ export const apiGetApartmentById = async (id) => {
   }
 };
 
-// Add a new property (POST request)
+// Add a new property
 export const apiAddProperty = async (propertyData) => {
   const token = getAuthToken();
-  try {
-    const formData = new FormData();
-    for (const key in propertyData) {
-      if (Array.isArray(propertyData[key])) {
-        propertyData[key].forEach((item) => formData.append(key, item));
-      } else {
-        formData.append(key, propertyData[key]);
-      }
-    }
+  if (!token) throw new Error('Authentication token is missing.');
 
+  const formData = new FormData();
+  for (const key in propertyData) {
+    if (Array.isArray(propertyData[key])) {
+      propertyData[key].forEach(item => formData.append(key, item));
+    } else {
+      formData.append(key, propertyData[key]);
+    }
+  }
+
+  try {
     const response = await axios.post(API_URL, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     });
-
-    console.log('Property added:', response.data);
     return response.data;
   } catch (error) {
     console.error("API add property error:", error.response ? error.response.data : error.message);
@@ -62,11 +68,11 @@ export const apiAddProperty = async (propertyData) => {
 // Add apartment to favorites
 export const apiAddToFavorite = async (apartmentId) => {
   const token = getAuthToken();
+  if (!token) throw new Error('Authentication token is missing.');
   try {
     const response = await axios.post(`${FAVORITE_API_URL}/add`, { apartmentId }, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` }
     });
-    console.log('Added to favorites:', response.data);
     return response.data;
   } catch (error) {
     console.error("API add to favorite error:", error.response ? error.response.data : error.message);
@@ -77,11 +83,11 @@ export const apiAddToFavorite = async (apartmentId) => {
 // Remove apartment from favorites
 export const apiRemoveFromFavorite = async (apartmentId) => {
   const token = getAuthToken();
+  if (!token) throw new Error('Authentication token is missing.');
   try {
     const response = await axios.delete(`${FAVORITE_API_URL}/delete/${apartmentId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` }
     });
-    console.log('Removed from favorites:', response.data);
     return response.data;
   } catch (error) {
     console.error("API remove from favorite error:", error.response ? error.response.data : error.message);
@@ -92,11 +98,11 @@ export const apiRemoveFromFavorite = async (apartmentId) => {
 // Get the user's favorites
 export const apiGetFavorites = async () => {
   const token = getAuthToken();
+  if (!token) throw new Error('Authentication token is missing.');
   try {
     const response = await axios.get(FAVORITE_API_URL, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` }
     });
-    console.log('Fetched favorites:', response.data);
     return response.data;
   } catch (error) {
     console.error("API get favorites error:", error.response ? error.response.data : error.message);

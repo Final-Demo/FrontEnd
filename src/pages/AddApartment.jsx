@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { apiClient } from "../services/config"; // Import the apiClient instance
 
-// The AddApartment component
 const AddApartment = () => {
   const [apartment, setApartment] = useState({
     title: '',
@@ -14,14 +13,14 @@ const AddApartment = () => {
     status: '',
     features: {
       isFurnished: false,
-    }
+    },
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Assuming the token is stored in localStorage
-  const token = localStorage.getItem("authToken"); // Adjust this if you are storing the token elsewhere
+  const token = localStorage.getItem("authToken");
 
   // Handle form input change
   const handleInputChange = (e) => {
@@ -31,8 +30,8 @@ const AddApartment = () => {
         ...prevState,
         features: {
           ...prevState.features,
-          isFurnished: e.target.checked
-        }
+          isFurnished: e.target.checked,
+        },
       }));
     } else {
       setApartment((prevState) => ({
@@ -56,7 +55,7 @@ const AddApartment = () => {
   // Handle image file input change (multiple images)
   const handleImageChange = (e) => {
     const files = e.target.files;
-    const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
+    const imagesArray = Array.from(files).map(file => file);
     setApartment((prevState) => ({
       ...prevState,
       images: imagesArray,
@@ -87,13 +86,13 @@ const AddApartment = () => {
       formData.append("amenities", apartment.amenities.join(","));
 
       // Append image files
-      for (let i = 0; i < e.target.images.files.length; i++) {
-        formData.append("images", e.target.images.files[i]);
-      }
+      apartment.images.forEach((image) => {
+        formData.append("images", image);
+      });
 
-      // Send the POST request with the authorization token in the header
-      const response = await axios.post(
-        "https://backend-xl0o.onrender.com/apartments",
+      // Send the POST request with the authorization token in the header using apiClient
+      const response = await apiClient.post(
+        "/apartments",  // Correct endpoint (no extra '/apartments')
         formData,
         {
           headers: {
@@ -195,32 +194,6 @@ const AddApartment = () => {
       </div>
 
       <div className="flex flex-col">
-        <label className="font-medium text-gray-700">Amenities</label>
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              value="Garden"
-              checked={apartment.amenities.includes("Garden")}
-              onChange={handleAmenityChange}
-              className="mr-2"
-            />
-            <label>Garden</label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              value="Playground"
-              checked={apartment.amenities.includes("Playground")}
-              onChange={handleAmenityChange}
-              className="mr-2"
-            />
-            <label>Playground</label>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col">
         <label htmlFor="status" className="font-medium text-gray-700">Status</label>
         <select
           id="status"
@@ -232,17 +205,6 @@ const AddApartment = () => {
           <option value="available">Available</option>
           <option value="sold">Unavailable</option>
         </select>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          name="isFurnished"
-          checked={apartment.features.isFurnished}
-          onChange={handleInputChange}
-          className="h-5 w-5 text-blue-500"
-        />
-        <label htmlFor="isFurnished" className="font-medium text-gray-700">Is this apartment furnished?</label>
       </div>
 
       <div className="flex flex-col">
@@ -257,7 +219,7 @@ const AddApartment = () => {
         />
         <div className="mt-2 flex space-x-2">
           {apartment.images.map((image, index) => (
-            <img key={index} src={image} alt={`apartment-img-${index}`} width="100" className="rounded-md" />
+            <img key={index} src={URL.createObjectURL(image)} alt={`apartment-img-${index}`} width="100" className="rounded-md" />
           ))}
         </div>
       </div>

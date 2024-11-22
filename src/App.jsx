@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./layout/Header";
-import Navbar from "./layout/Navbar";
+import Navbar from "./layout/Navbar";  // Ensure this is the updated Navbar with the profile dropdown
+import Navbar2 from "./components/Navbar2"; // Import the new Navbar2
 import Footer from "./layout/Footer";
 import Home from "./pages/Home";
+import Home2 from "./components/Home2"; // Import the Home2 component
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -11,6 +13,7 @@ import ResetPassword from "./components/auth/ResetPassword";
 import ApartmentList from "./components/dashboard/ApartmentList";
 import ApartmentDetails from "./components/dashboard/ApartmentDetails";
 import UserDashboard from "./components/dashboard/UserDashboard";
+import Dashboard from "./components/dashboard/Dashboard"; // Import your new Dashboard component
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ErrorMessage from "./components/common/ErrorMessage";
 import SuccessMessage from "./components/common/SuccessMessage";
@@ -30,6 +33,7 @@ const AppContent = () => {
     '/forgot-password',
     '/reset-password',
     '/dashboardlay',
+    '/dashboard',
     '/udashboard', // Add all dashboard-related routes here
   ];
 
@@ -41,12 +45,13 @@ const AppContent = () => {
       {/* Conditionally render Header only for Home page */}
       {location.pathname === '/' && <Header />}
 
-      {/* Conditionally render Navbar only if not on authentication or dashboard routes */}
-      {!shouldHideNavbarFooter && <Navbar />}
+      {/* Conditionally render Navbar2 only for Home2 */}
+      {location.pathname === '/home2' ? <Navbar2 /> : !shouldHideNavbarFooter && <Navbar />}
 
       <Routes>
         {/* Main Routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/home2" element={<Home2 />} />  {/* Add Home2 route */}
 
         {/* Authentication Routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -72,8 +77,11 @@ const AppContent = () => {
         {/* User Dashboard */}
         <Route path="/udashboard" element={<UserDashboard />} />
 
+        {/* New Dashboard Route */}
+        <Route path="/dashboard" element={<Dashboard />} /> {/* New Dashboard Route */}
+
         {/* Email Verification Route */}
-        <Route path="/verify-email/:token" element={<EmailVerification />} /> {/* Add this route */}
+        <Route path="/verify-email/:token" element={<EmailVerification />} />
 
         {/* Common Components */}
         <Route path="/loading" element={<LoadingSpinner />} />

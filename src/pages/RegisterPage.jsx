@@ -5,11 +5,11 @@ import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    firstName: "Philip",
-    lastName: "Quaicoe",
-    email: "qwekukhalid266@gmail.com",
-    password: "hello12345",
-    phoneNumber: "0557424675",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -82,8 +82,8 @@ const RegisterPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Register</h2>
+      <div className="bg-white p-10 rounded-2xl shadow-lg w-96">
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">Create Your Account</h2>
 
         {/* Display error messages */}
         {Object.values(errors).map((error, index) => (
@@ -92,81 +92,71 @@ const RegisterPage = () => {
 
         <form onSubmit={handleSubmit}>
           {/* First Name field */}
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-              First Name
-            </label>
+          <div className="mb-6">
+            <label htmlFor="firstName" className="block text-lg font-medium text-gray-700">First Name</label>
             <input
               type="text"
               id="firstName"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Enter your first name"
             />
           </div>
 
           {/* Last Name field */}
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-              Last Name
-            </label>
+          <div className="mb-6">
+            <label htmlFor="lastName" className="block text-lg font-medium text-gray-700">Last Name</label>
             <input
               type="text"
               id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Enter your last name"
             />
           </div>
 
           {/* Email field */}
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email Address
-            </label>
+          <div className="mb-6">
+            <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email Address</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Enter your email"
             />
           </div>
 
           {/* Password field */}
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-lg font-medium text-gray-700">Password</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Enter your password"
             />
           </div>
 
           {/* Phone Number field */}
-          <div className="mb-6">
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-              Phone Number
-            </label>
+          <div className="mb-8">
+            <label htmlFor="phoneNumber" className="block text-lg font-medium text-gray-700">Phone Number</label>
             <input
               type="text"
               id="phoneNumber"
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              className="w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Enter your phone number"
             />
           </div>
@@ -174,7 +164,7 @@ const RegisterPage = () => {
           {/* Submit button */}
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="w-full py-4 px-6 bg-gradient-to-r from-indigo-500 to-blue-600 text-white text-lg font-semibold rounded-lg shadow-lg hover:from-indigo-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 disabled:bg-gray-400"
             disabled={loading} // Disable button when loading
           >
             {loading ? "Registering..." : "Register"}
@@ -182,7 +172,7 @@ const RegisterPage = () => {
         </form>
 
         {/* Optional: Link to the Login page */}
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-6">
           Already have an account?{" "}
           <a href="/login" className="text-indigo-600 hover:text-indigo-800">
             Login here

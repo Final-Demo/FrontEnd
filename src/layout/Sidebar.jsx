@@ -19,7 +19,7 @@ const Sidebar = () => {
             <h2
               className={`text-xl font-semibold transition-all duration-300 ${isSidebarHovered ? 'block' : 'hidden'}`}
             >
-              Property Owner
+              Admin
             </h2>
             <button
               onClick={() => setSidebarHovered(!isSidebarHovered)}

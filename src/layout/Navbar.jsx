@@ -7,7 +7,7 @@ function Navbar() {
     <nav className="bg-[#003366] p-4"> {/* Navy Blue background */}
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-xl font-bold">
-          <Link to="/">RentLinks</Link>
+          <Link to="/">Rent4Me</Link>
         </div>
         <ul className="flex space-x-6">
           <li>

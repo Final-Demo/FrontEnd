@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faMapMarkerAlt, faMoneyBillWave, faShieldAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
 
-const Home = () => {
+const Home2 = () => {
   const [selectedCategory, setSelectedCategory] = useState('apartments');
   const [apartments, setApartments] = useState([]); // State to hold fetched apartments
   const [filteredApartments, setFilteredApartments] = useState([]); // State for filtered apartments
@@ -177,4 +177,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home2;

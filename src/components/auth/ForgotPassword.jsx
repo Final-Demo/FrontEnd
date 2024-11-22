@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify"; // Importing Toastify for notifications
+import { toast, ToastContainer } from "react-toastify"; // Import Toastify for notifications
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
 
 const ForgotPassword = () => {
@@ -10,7 +10,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      toast.error("Please enter your email");
+      toast.error("Please enter your email"); // Show error toast if email is missing
       return;
     }
 
@@ -28,12 +28,12 @@ const ForgotPassword = () => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Password reset link sent! Please check your email.");
+        toast.success("Password reset link sent! Please check your email."); // Show success toast
       } else {
-        toast.error(data.message || "Something went wrong");
+        toast.error(data.message || "Something went wrong"); // Show error toast if response is not ok
       }
     } catch (error) {
-      toast.error("Error occurred while requesting password reset");
+      toast.error("Error occurred while requesting password reset"); // Show error toast if fetch fails
     } finally {
       setLoading(false);
     }
@@ -68,6 +68,9 @@ const ForgotPassword = () => {
           </button>
         </form>
       </div>
+
+      {/* Toast Container for notifications */}
+      <ToastContainer />
     </div>
   );
 };

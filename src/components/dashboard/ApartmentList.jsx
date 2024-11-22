@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaTh, FaList, FaHeart } from 'react-icons/fa'; // Import icons
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { FaTh, FaList, FaHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import axios from 'axios'; // For API requests
 
 // Child Component: Search and Filter
@@ -76,7 +76,7 @@ const PropertyCard = ({ property, isFavourite, onToggleFavourite }) => {
         className="w-full h-56 object-cover rounded-t-lg"
       />
       <div className="p-4">
-        <h3 className="font-bold text-xl">{property.name}</h3>
+        <h3 className="font-bold text-xl">{property.title}</h3>
         <p className="text-gray-500">{property.location}</p>
         <p className="text-green-600 font-semibold">${property.price.toLocaleString()}</p>
         <p className="text-gray-600">Bedrooms: {property.bedrooms}</p>
@@ -107,84 +107,61 @@ const ErrorMessage = ({ error }) => {
 };
 
 const ApartmentList = ({ children }) => {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState([]); // Ensure it's initialized as an array
   const [search, setSearch] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [bedroomFilter, setBedroomFilter] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [favourites, setFavourites] = useState([]); // State for favourites
+  const [favourites, setFavourites] = useState([]);
 
   // Fetch properties
   const fetchProperties = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('https://backend-xl0o.onrender.com/apartments');
-      if (!response.ok) {
-        throw new Error('Failed to fetch properties');
+      const response = await axios.get('https://backend-xl0o.onrender.com/apartments');
+      console.log(response.data); // Logging the response to inspect the structure
+
+      const data = response.data;
+
+      if (Array.isArray(data.apartment)) {
+        setProperties(data.apartment); // Set properties to the 'apartment' array from the response
+      } else {
+        throw new Error('Invalid response format: "apartment" is not an array');
       }
-      const data = await response.json();
-      setProperties(data);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Failed to fetch properties');
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch favourites
-  const fetchFavourites = async () => {
-    try {
-      const response = await axios.get('/api/favourites');
-      
-      // Ensure the response is an array and map over it
-      if (Array.isArray(response.data)) {
-        setFavourites(response.data.map(fav => fav.id)); // Assuming the response has 'id' property
-      } else {
-        console.error('Unexpected format for favourites:', response.data);
-        setFavourites([]);
-      }
-    } catch (err) {
-      console.error('Error fetching favourites:', err);
-    }
+  // Handle toggle for favourites
+  const handleToggleFavourite = (propertyId, isFavourite) => {
+    setFavourites((prevFavourites) =>
+      isFavourite ? prevFavourites.filter((id) => id !== propertyId) : [...prevFavourites, propertyId]
+    );
   };
-
-  // Toggle favourite status
-  const handleToggleFavourite = async (apartmentId, isFavourite) => {
-    try {
-      if (isFavourite) {
-        // Remove from favourites
-        await axios.delete(`/api/favourite/${apartmentId}`);
-        setFavourites(favourites.filter(id => id !== apartmentId));
-      } else {
-        // Add to favourites
-        await axios.post('/api/favourite', { apartmentId });
-        setFavourites([...favourites, apartmentId]);
-      }
-    } catch (err) {
-      console.error('Error updating favourites:', err);
-    }
-  };
-
-  // Fetch data on component mount
-  useEffect(() => {
-    fetchProperties();
-    fetchFavourites(); // Fetch favourites after properties are fetched
-  }, []);
 
   // Filter properties based on search and filters
-  const filteredProperties = properties.filter((property) => {
-    const matchesSearch =
-      (property.name && property.name.toLowerCase().includes(search.toLowerCase())) ||
-      (property.location && property.location.toLowerCase().includes(search.toLowerCase()));
-  
-    const matchesPrice = priceFilter ? property.price <= priceFilter : true;
-    const matchesBedrooms = bedroomFilter ? property.bedrooms >= bedroomFilter : true;
-  
-    return matchesSearch && matchesPrice && matchesBedrooms;
-  });
+  const filteredProperties = Array.isArray(properties)
+    ? properties.filter((property) => {
+        const matchesSearch =
+          (property.title && property.title.toLowerCase().includes(search.toLowerCase())) ||
+          (property.location && property.location.toLowerCase().includes(search.toLowerCase()));
+
+        const matchesPrice = priceFilter ? property.price <= priceFilter : true;
+        const matchesBedrooms = bedroomFilter ? property.bedrooms >= bedroomFilter : true;
+
+        return matchesSearch && matchesPrice && matchesBedrooms;
+      })
+    : [];
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
@@ -218,7 +195,7 @@ const ApartmentList = ({ children }) => {
               <PropertyCard
                 key={property.id}
                 property={property}
-                isFavourite={favourites.includes(property.id)} // Check if the property is a favourite
+                isFavourite={favourites.includes(property.id)}
                 onToggleFavourite={handleToggleFavourite}
               />
             ))

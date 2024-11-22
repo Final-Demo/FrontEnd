@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom"; // Assuming you will use React Router
+import { toast } from "react-toastify"; // Import the toast function from react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import the required CSS for the toasts
 
 const ResetPassword = () => {
   const { token } = useParams(); // Get the reset token from URL params
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setMessage("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match"); // Show error toast
       setLoading(false);
       return;
     }
@@ -25,9 +23,9 @@ const ResetPassword = () => {
       // Simulate API call for password reset
       // Replace with actual API call to reset password using the token
       const response = await fakeApiCall(token, password);
-      setMessage("Your password has been reset successfully.");
+      toast.success("Your password has been reset successfully."); // Success toast
     } catch (err) {
-      setError("Failed to reset password. Please try again.");
+      toast.error("Failed to reset password. Please try again."); // Error toast
     } finally {
       setLoading(false);
     }
@@ -87,8 +85,8 @@ const ResetPassword = () => {
         </button>
       </form>
 
-      {message && <p className="mt-4 text-green-500">{message}</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {/* Toast container for displaying notifications */}
+      <ToastContainer />
     </div>
   );
 };
