@@ -123,7 +123,7 @@ const Home2 = () => {
               filteredApartments.map((apartment, index) => (
                 <div key={index} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2 border-gray-200">
                   <img
-                    src={apartment.imageUrl || 'https://essexmeadows.com/wp-content/uploads/shutterstock_630857810-1.jpg'}  // Fallback to a default image if not provided
+                    src={apartment.imageUrl || 'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}  // Fallback to a default image if not provided
                     alt={apartment.title || 'Apartment Image'}
                     className="w-full h-48 sm:h-56 object-cover"
                   />

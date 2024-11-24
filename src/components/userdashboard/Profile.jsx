@@ -35,6 +35,12 @@ const Profile = () => {
         const data = await response.json();
         setUser(data);
         setFormData(data); // Populate form data with fetched user data
+
+        // Set the profile image URL if available
+        if (data.profilePicture) {
+          setProfilePicture(data.profilePicture);
+        }
+
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -120,7 +126,7 @@ const Profile = () => {
           <div className="flex items-center space-x-4">
             {profilePicture ? (
               <img
-                src={profilePicture}
+                src={'https://savefiles.org/${profileData.avatar}?shareable_link=559'}
                 alt="Profile"
                 className="w-24 h-24 object-cover rounded-full border"
               />

@@ -78,8 +78,7 @@ const ApartmentDetails = () => {
   }
 
   const { title, description, location, price, images } = apartmentData;
-  const imageBaseUrl = import.meta.env.VITE_BASE_URL || 'https://savefiles.org/secure/uploads/21045?shareable_link=511';
-  const imageUrl = images?.length ? `${imageBaseUrl}/${images[0]}` : 'default-image.jpg';
+  const imageBaseUrl = import.meta.env.VITE_BASE_URL || 'https://savefiles.org/secure/uploads/22507?shareable_link=559';
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -93,7 +92,26 @@ const ApartmentDetails = () => {
 
       <div className="flex flex-col sm:flex-row gap-6 mb-6">
         <div className="sm:w-1/2">
-          <img src={imageUrl} alt={title} className="w-full h-96 object-cover" />
+          {/* Loop through all images and display them */}
+          {images && images.length > 0 ? (
+            images.map((image, index) => {
+              const imageUrl = `${imageBaseUrl}/${image}`;
+              return (
+                <img
+                  key={index}  // Use the index as a unique key for each image
+                  src={'https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
+                  alt={`Image ${index + 1} of ${title}`}
+                  className="w-full h-96 object-cover mb-4"  // Added margin for spacing between images
+                />
+              );
+            })
+          ) : (
+            <img
+              src="default-image.jpg"
+              alt="Default Apartment Image"
+              className="w-full h-96 object-cover"
+            />
+          )}
         </div>
 
         <div className="sm:w-1/2">

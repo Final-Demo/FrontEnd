@@ -63,7 +63,7 @@ const ViewModeToggle = ({ viewMode, setViewMode }) => {
 
 // Child Component: Property Card
 const PropertyCard = ({ property, isFavourite, onToggleFavourite }) => {
-  const imageUrl = property.image || 'https://savefiles.org/secure/uploads/21045?shareable_link=511';
+  const imageUrl = property.image || 'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';  // Default image URL
 
   return (
     <Link
@@ -72,7 +72,7 @@ const PropertyCard = ({ property, isFavourite, onToggleFavourite }) => {
     >
       <img
         src={imageUrl}
-        alt={property.name}
+        alt={property.title}
         className="w-full h-56 object-cover rounded-t-lg"
       />
       <div className="p-4">
