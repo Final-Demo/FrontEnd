@@ -3,7 +3,7 @@ import { FaPhoneAlt, FaSearch, FaUser, FaSignInAlt } from 'react-icons/fa'; // A
 
 const Header = () => {
   return (
-    <header className="bg-gray-400 text-white py-4"> {/* Dark Yellow background */}
+    <header className="bg-gray-400 text-white py-3"> {/* Dark Yellow background */}
       <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center px-4 sm:px-6">
         
         {/* Left section: Phone Numbers, Email & Quick Links */}
