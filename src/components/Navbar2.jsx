@@ -100,7 +100,7 @@ function Navbar2() {
         {/* Navbar links (visible on medium and larger screens) */}
         <ul className={`md:flex space-x-6 ${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex`}>
           <li>
-            <Link to="/" className="text-white hover:text-[#FFD700]">Home</Link>
+            <Link to="/home2" className="text-white hover:text-[#FFD700]">Home</Link>
           </li>
           <li>
             <Link to="/about-us" className="text-white hover:text-[#FFD700]">About</Link>
