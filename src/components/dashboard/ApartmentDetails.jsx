@@ -78,7 +78,7 @@ const ApartmentDetails = () => {
   }
 
   const { title, description, location, price, images } = apartmentData;
-  const imageBaseUrl = import.meta.env.VITE_BASE_URL || 'https://default-image-url.com/';
+  const imageBaseUrl = import.meta.env.VITE_BASE_URL || 'https://savefiles.org/secure/uploads/21045?shareable_link=511';
   const imageUrl = images?.length ? `${imageBaseUrl}/${images[0]}` : 'default-image.jpg';
 
   return (

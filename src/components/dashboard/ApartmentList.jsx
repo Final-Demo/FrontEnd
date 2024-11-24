@@ -67,7 +67,7 @@ const PropertyCard = ({ property, isFavourite, onToggleFavourite }) => {
 
   return (
     <Link
-      to={`/apartdetail/${property.id}`} // Link to the ApartmentDetail page with the apartment id
+      to={`/apartmentdetail/${property.id}`} // Link to the ApartmentDetail page with the apartment id
       className="bg-white rounded-lg shadow-lg"
     >
       <img
