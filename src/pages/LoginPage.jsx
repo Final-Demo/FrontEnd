@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    email: "qwekukhalid266@gmail.com",
-    password: "hello12345",
+    email: "qwekukhalid266@gmail.com", // Replace with initial empty value if needed
+    password: "hello12345", // Replace with initial empty value if needed
   });
 
   const [errors, setErrors] = useState({});
@@ -55,11 +55,13 @@ const LoginPage = () => {
       const data = await response.json();
   
       if (response.ok) {
-        localStorage.setItem("authToken", data.token);
-        toast.success("Login successful! Redirecting to home...");
+        localStorage.setItem("authToken", data.token); // Save token in localStorage
+        toast.success("Login successful...");
+        
+        // Redirect to /home2 after a successful login
         setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          navigate("/home2"); // Redirect to /home2 page
+        }, 2000); // You can adjust the delay if needed
       } else {
         toast.error(data.message || "Invalid email or password");
         setErrors({ login: "Invalid email or password" });
@@ -72,26 +74,26 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="flex bg-white p-8 rounded-lg shadow-lg w-[80%] max-w-4xl">
+    <div className="flex justify-center items-center min-h-screen bg-white p-4">
+      <div className="flex flex-col md:flex-row bg-cyan-400 p-6 rounded-3xl shadow-xl w-full max-w-4xl">
         {/* Logo Section */}
-        <div className="flex-shrink-0 w-1/3 flex justify-center items-center">
-          <img
-            src="" // Replace with your logo path
+        <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center items-center mb-8 md:mb-0">
+          <img 
+            src="./src/assets/images/rent4melogo.jpg" // Replace with your logo path
             alt="Logo"
-            className="w-24 h-24 object-contain"
+            className="w-36 h-36 md:w-44 md:h-44 object-contain rounded-3xl shadow-orange-600"
           />
         </div>
 
         {/* Login Form Section */}
-        <div className="w-2/3 p-4">
-          <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        <div className="w-full md:w-2/3 md:ml-8 p-4">
+          <h2 className="text-3xl md:text-2xl font-semibold text-center mb-6">Login</h2>
           
           {errors.login && <p className="text-red-500 text-center mb-4">{errors.login}</p>}
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-black">
                 Email Address
               </label>
               <input
@@ -107,7 +109,7 @@ const LoginPage = () => {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-black">
                 Password
               </label>
               <input
@@ -132,14 +134,14 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-4 text-center">
-            <a href="/forgot-password" className="text-indigo-600 hover:text-indigo-800">
+            <a href="/forgot-password" className="text-white hover:text-white text-bold">
               Forgot your password?
             </a>
           </div>
 
           <p className="text-sm text-center mt-4">
             Don't have an account?{" "}
-            <a href="/register" className="text-indigo-600 hover:text-indigo-800">
+            <a href="/register" className="text-white hover:text-indigo-800">
               Register here
             </a>
           </p>

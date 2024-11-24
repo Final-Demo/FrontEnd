@@ -106,7 +106,7 @@ const ErrorMessage = ({ error }) => {
   return <div className="text-red-500 text-center mb-6">{error}</div>;
 };
 
-const ApartmentList = ({ children }) => {
+const ApartmentList = ({ isAuthenticated }) => {
   const [properties, setProperties] = useState([]); // Ensure it's initialized as an array
   const [search, setSearch] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
@@ -122,8 +122,6 @@ const ApartmentList = ({ children }) => {
     setError(null);
     try {
       const response = await axios.get('https://backend-xl0o.onrender.com/apartments');
-      console.log(response.data); // Logging the response to inspect the structure
-
       const data = response.data;
 
       if (Array.isArray(data.apartment)) {
@@ -204,8 +202,6 @@ const ApartmentList = ({ children }) => {
           )}
         </div>
       )}
-
-      <main>{children}</main>
     </div>
   );
 };

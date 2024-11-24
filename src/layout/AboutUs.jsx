@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
+// A simple spinner component for loading state
+const Spinner = () => (
+  <div className="flex justify-center items-center">
+    <div className="animate-spin border-4 border-t-4 border-blue-500 w-16 h-16 border-solid rounded-full"></div>
+  </div>
+);
+
 const AboutUs = () => {
   const [aboutUsData, setAboutUsData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // This function would typically fetch data from the backend.
   const fetchAboutUsData = async () => {
     try {
-      // Assuming there's an API endpoint that sends back the "About Us" data
-      // const response = await fetch('/api/about-us');
-      // const data = await response.json();
-      
       // Simulating fetched data for now
       const data = {
         title: "About Rent4Me",
@@ -24,8 +29,11 @@ const AboutUs = () => {
       };
 
       setAboutUsData(data);
+      setLoading(false);  // Set loading to false after data is fetched
     } catch (error) {
       console.error("Error fetching About Us data:", error);
+      setError("Failed to load data. Please try again later.");
+      setLoading(false);  // Set loading to false even if there's an error
     }
   };
 
@@ -33,8 +41,20 @@ const AboutUs = () => {
     fetchAboutUsData();
   }, []);
 
-  if (!aboutUsData) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="about-us-container bg-gray-100 p-8">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="about-us-container bg-gray-100 p-8">
+        <p className="text-red-500 text-center font-semibold">{error}</p>
+      </div>
+    );
   }
 
   return (

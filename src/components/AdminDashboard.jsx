@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 
+// Loading spinner component
+const Spinner = () => (
+  <div className="flex justify-center items-center">
+    <div className="animate-spin border-4 border-t-4 border-blue-500 w-16 h-16 border-solid rounded-full"></div>
+  </div>
+);
+
 const AdminDashboard = () => {
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
@@ -7,6 +14,7 @@ const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const propertiesPerPage = 5;
 
@@ -14,42 +22,46 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
-      // Simulated API call - Replace with real API endpoint
-      const mockData = [
-        {
-          id: 1,
-          title: "Luxury Villa",
-          owner: "John Doe",
-          address: "123 Palm Street, Beverly Hills",
-          price: 1000000,
-          status: "Pending",
-          description: "A spacious luxury villa with a private pool and garden.",
-        },
-        {
-          id: 2,
-          title: "Modern Apartment",
-          owner: "Jane Smith",
-          address: "456 Sunset Avenue, Miami",
-          price: 500000,
-          status: "Approved",
-          description: "A fully furnished modern apartment near the beach.",
-        },
-        {
-          id: 3,
-          title: "Cozy Cottage",
-          owner: "Emily Johnson",
-          address: "789 Oak Lane, Vermont",
-          price: 200000,
-          status: "Rejected",
-          description: "A charming cottage in the countryside.",
-        },
-      ];
-      setTimeout(() => {
+      try {
+        // Simulated API call - Replace with real API endpoint
+        const mockData = [
+          {
+            id: 1,
+            title: "Luxury Villa",
+            owner: "John Doe",
+            address: "123 Palm Street, Beverly Hills",
+            price: 1000000,
+            status: "Pending",
+            description: "A spacious luxury villa with a private pool and garden.",
+          },
+          {
+            id: 2,
+            title: "Modern Apartment",
+            owner: "Jane Smith",
+            address: "456 Sunset Avenue, Miami",
+            price: 500000,
+            status: "Approved",
+            description: "A fully furnished modern apartment near the beach.",
+          },
+          {
+            id: 3,
+            title: "Cozy Cottage",
+            owner: "Emily Johnson",
+            address: "789 Oak Lane, Vermont",
+            price: 200000,
+            status: "Rejected",
+            description: "A charming cottage in the countryside.",
+          },
+        ];
         setProperties(mockData);
         setFilteredProperties(mockData);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
         setLoading(false);
-      }, 1000);
+      }
     };
+
     fetchProperties();
   }, []);
 
@@ -92,9 +104,11 @@ const AdminDashboard = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
+      setDeleting(true);
       setProperties((prev) => prev.filter((property) => property.id !== id));
       setFilteredProperties((prev) => prev.filter((property) => property.id !== id));
       alert("Property Deleted!");
+      setDeleting(false);
     }
   };
 
@@ -131,30 +145,18 @@ const AdminDashboard = () => {
 
       {/* Table */}
       {loading ? (
-        <p className="text-center text-lg text-gray-500">Loading properties...</p>
+        <Spinner />
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
             <thead>
               <tr>
-                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">
-                  Title
-                </th>
-                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">
-                  Owner
-                </th>
-                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">
-                  Address
-                </th>
-                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">
-                  Price
-                </th>
-                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">
-                  Status
-                </th>
-                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">
-                  Actions
-                </th>
+                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Title</th>
+                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Owner</th>
+                <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Address</th>
+                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">Price</th>
+                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">Status</th>
+                <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -168,12 +170,8 @@ const AdminDashboard = () => {
                       {property.title}
                     </button>
                   </td>
-                  <td className="px-4 py-2 border-b text-sm text-gray-700">
-                    {property.owner}
-                  </td>
-                  <td className="px-4 py-2 border-b text-sm text-gray-700">
-                    {property.address}
-                  </td>
+                  <td className="px-4 py-2 border-b text-sm text-gray-700">{property.owner}</td>
+                  <td className="px-4 py-2 border-b text-sm text-gray-700">{property.address}</td>
                   <td className="px-4 py-2 border-b text-center text-sm text-gray-700">
                     ${property.price.toLocaleString()}
                   </td>
@@ -209,10 +207,10 @@ const AdminDashboard = () => {
                     )}
                     <button
                       onClick={() => handleDelete(property.id)}
-                      disabled={loading}
+                      disabled={deleting || loading}
                       className="mt-2 px-3 py-1 bg-gray-300 text-gray-800 text-sm rounded hover:bg-gray-400"
                     >
-                      Delete
+                      {deleting ? "Deleting..." : "Delete"}
                     </button>
                   </td>
                 </tr>

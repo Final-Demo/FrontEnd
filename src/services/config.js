@@ -1,20 +1,30 @@
-// src/services/config.js
+import axios from "axios";
 
-import axios from 'axios';
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
-// Access the VITE_BASE_URL from environment variables
-const baseURL = import.meta.env.VITE_BASE_URL || 'https://backend-xl0o.onrender.com/apartments'; // Default to your backend URL
-
-// Retrieve the token from localStorage
+// Fetch the token from localStorage
 const token = localStorage.getItem("token");
 
-// Create the Axios client instance with the base URL
+// If token exists, set the Authorization header
+if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
+
+// Create an axios instance with the base URL
 export const apiClient = axios.create({
-  baseURL: baseURL,  // Use the environment variable for the base URL (or fallback)
-  headers: {
-    // Add the Authorization header only if the token is available
-    ...(token && { Authorization: `Bearer ${token}` }),
-  },
+    baseURL: baseUrl,
 });
 
-console.log('API base URL:', baseURL);  // Optional: Check if the baseURL is being set correctly
+// Log baseUrl only in development
+if (import.meta.env.MODE === "development") {
+    console.log('base URL:', baseUrl);
+}
+
+// Optional: Add response error handling for the axios instance
+apiClient.interceptors.response.use(
+    response => response,
+    error => {
+        console.error('API request failed:', error);
+        return Promise.reject(error);
+    }
+);

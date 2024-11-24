@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for routing
-import { FaChevronDown } from 'react-icons/fa'; // Importing the down arrow icon
+import { Link, useNavigate } from 'react-router-dom';
+import { FaChevronDown, FaBars, FaArrowUp } from 'react-icons/fa'; // Added upgrade icon
 
 function Navbar2() {
-  // State to toggle the dropdown menu
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
-  // Create a reference for the dropdown menu to detect clicks outside
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); 
+  const [user, setUser] = useState(null); // State to store user data
+  const [error, setError] = useState(null); // State to store any error messages
+
   const dropdownRef = useRef(null);
   const profileButtonRef = useRef(null);
+  const navigate = useNavigate(); 
 
   // Function to toggle dropdown visibility
   const toggleDropdown = () => {
@@ -30,6 +32,56 @@ function Navbar2() {
     };
   }, []);
 
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  // Handle sign out
+  const handleSignOut = () => {
+    localStorage.removeItem('authToken'); // Remove token from localStorage
+    navigate('/login'); // Redirect to login page after sign-out
+  };
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem('authToken');
+
+        if (!token) {
+          throw new Error('No token found. Please log in.');
+        }
+
+        const response = await fetch('https://backend-xl0o.onrender.com/user', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Include token in Authorization header
+          },
+        });
+
+        if (response.status === 401) {
+          navigate('/login'); // Redirect to login page if unauthorized
+          throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUser(data); // Set the user data to state
+      } catch (error) {
+        setError('Error fetching user data: ' + error.message); // Handle errors
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]); // Effect will run once after component mounts
+
   return (
     <nav className="bg-[#003366] p-4 fixed top-0 left-0 w-full z-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
@@ -38,10 +90,17 @@ function Navbar2() {
           <Link to="/">Rent4Me</Link>
         </div>
 
-        {/* Navbar links */}
-        <ul className="flex space-x-6">
+        {/* Hamburger icon for mobile */}
+        <div className="md:hidden flex items-center">
+          <button onClick={toggleMobileMenu} className="text-white">
+            <FaBars size={24} />
+          </button>
+        </div>
+
+        {/* Navbar links (visible on medium and larger screens) */}
+        <ul className={`md:flex space-x-6 ${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex`}>
           <li>
-            <Link to="/" className="text-white hover:text-[#FFD700]">Home</Link>
+            <Link to="/home2" className="text-white hover:text-[#FFD700]">Home</Link>
           </li>
           <li>
             <Link to="/about-us" className="text-white hover:text-[#FFD700]">About</Link>
@@ -51,10 +110,11 @@ function Navbar2() {
           </li>
         </ul>
 
-        {/* Upgrade Membership Button */}
-        <div className="ml-4">
-          <Link to="/upgrade" className="bg-[#FFD700] text-black px-6 py-2 rounded-full font-semibold hover:bg-[#e6b800]">
-            Upgrade Membership
+        {/* Upgrade Membership Button (with icon and label) */}
+        <div className="ml-4 flex items-center">
+          <Link to="/upgrade" className="bg-[#FFD700] text-black px-4 py-2 rounded-full font-semibold hover:bg-[#e6b800] flex items-center space-x-2">
+            <FaArrowUp size={18} /> {/* Upgrade icon */}
+            <span className="hidden md:inline">Upgrade</span> {/* Show label on medium and larger screens */}
           </Link>
         </div>
 
@@ -67,11 +127,11 @@ function Navbar2() {
             className="text-white flex items-center space-x-2 hover:text-[#FFD700] focus:outline-none"
           >
             {/* Greeting Text */}
-            <span className="text-white mr-2">Hi, welcome Benjamin</span> 
+            <span className="text-white mr-2">{user ? `Hi, ${user.firstName}` : 'Loading...'}</span> 
             
             {/* Profile Image */}
             <img
-              src="https://via.placeholder.com/40"  // Replace with actual profile image URL
+              src={user ? user.profilePicture : 'https://via.placeholder.com/40'}  // Use actual profile image if available
               alt="Profile"
               className="w-10 h-10 rounded-full border-2 border-white"  // Styling the profile image
             />
@@ -116,6 +176,15 @@ function Navbar2() {
                   >
                     Settings
                   </Link>
+                </li>
+                {/* Sign Out Link */}
+                <li>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-[#f0f0f0] hover:text-[#003366]"
+                  >
+                    Sign Out
+                  </button>
                 </li>
               </ul>
             </div>
