@@ -8,12 +8,8 @@ const AddApartment = () => {
     location: '',
     price: '',
     images: [],
-    category: '',
-    amenities: [],
-    status: '',
-    features: {
-      isFurnished: false,
-    },
+    category: '',  // Category should be required
+    status: '',    // Status should be required
   });
 
   const [loading, setLoading] = useState(false);
@@ -25,30 +21,9 @@ const AddApartment = () => {
   // Handle form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'isFurnished') {
-      setApartment((prevState) => ({
-        ...prevState,
-        features: {
-          ...prevState.features,
-          isFurnished: e.target.checked,
-        },
-      }));
-    } else {
-      setApartment((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
-
-  // Handle amenities change (multiple checkboxes)
-  const handleAmenityChange = (e) => {
-    const { value, checked } = e.target;
     setApartment((prevState) => ({
       ...prevState,
-      amenities: checked
-        ? [...prevState.amenities, value]
-        : prevState.amenities.filter((amenity) => amenity !== value),
+      [name]: value,
     }));
   };
 
@@ -62,6 +37,7 @@ const AddApartment = () => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -72,7 +48,21 @@ const AddApartment = () => {
         throw new Error("You are not logged in. Please log in again.");
       }
 
-      // Create FormData to send along with the POST request
+      // Validate required fields
+      if (
+        !apartment.title ||
+        !apartment.description ||
+        !apartment.location ||
+        !apartment.price ||
+        !apartment.category ||
+        !apartment.status ||
+        apartment.images.length === 0
+      ) {
+        setError("All fields are required, and at least one image must be uploaded.");
+        return;
+      }
+
+      // Prepare FormData object
       const formData = new FormData();
       formData.append("title", apartment.title);
       formData.append("description", apartment.description);
@@ -80,32 +70,29 @@ const AddApartment = () => {
       formData.append("price", apartment.price);
       formData.append("category", apartment.category);
       formData.append("status", apartment.status);
-      formData.append("isFurnished", apartment.features.isFurnished);
 
-      // Append amenities as a comma-separated string
-      formData.append("amenities", apartment.amenities.join(","));
-
-      // Append image files
+      // Append each image file as a separate field with the same name "images[]"
       apartment.images.forEach((image) => {
-        formData.append("images", image);
+        formData.append("images[]", image);  // Append the file with 'images[]' as key
       });
 
-      // Send the POST request with the authorization token in the header using apiClient
-      const response = await apiClient.post(
-        "/apartments",  // Correct endpoint (no extra '/apartments')
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Include the token here
-          },
-        }
-      );
+      // Log FormData to check the structure (for debugging purposes)
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      // Send the POST request with the authorization token in the header
+      const response = await apiClient.post("/apartments", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure correct content type for file uploads
+          Authorization: `Bearer ${token}`, // Include the token
+        },
+      });
 
       // Check if the response is successful
       if (response.status === 201) {
         alert("Apartment added successfully!");
-        // Reset the form if needed
+        // Reset the form after successful submission
         setApartment({
           title: '',
           description: '',
@@ -113,9 +100,7 @@ const AddApartment = () => {
           price: '',
           images: [],
           category: '',
-          amenities: [],
           status: '',
-          features: { isFurnished: false },
         });
       }
     } catch (error) {

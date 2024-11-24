@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for routing
-import { FaChevronDown } from 'react-icons/fa'; // Importing the down arrow icon
+import { Link, useNavigate } from 'react-router-dom'; // Import Link for routing and useNavigate for redirection
+import { FaChevronDown, FaBars } from 'react-icons/fa'; // Importing the down arrow and hamburger icon
 
 function Navbar2() {
-  // State to toggle the dropdown menu
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
-  // Create a reference for the dropdown menu to detect clicks outside
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // State to toggle mobile menu
+
   const dropdownRef = useRef(null);
   const profileButtonRef = useRef(null);
+
+  const navigate = useNavigate(); // For redirecting after sign-out
 
   // Function to toggle dropdown visibility
   const toggleDropdown = () => {
@@ -30,6 +31,17 @@ function Navbar2() {
     };
   }, []);
 
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  // Handle sign out
+  const handleSignOut = () => {
+    localStorage.removeItem('authToken'); // Remove token from localStorage (or sessionStorage)
+    navigate('/login'); // Redirect to login page after sign-out
+  };
+
   return (
     <nav className="bg-[#003366] p-4 fixed top-0 left-0 w-full z-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
@@ -38,8 +50,15 @@ function Navbar2() {
           <Link to="/">Rent4Me</Link>
         </div>
 
-        {/* Navbar links */}
-        <ul className="flex space-x-6">
+        {/* Hamburger icon for mobile */}
+        <div className="md:hidden flex items-center">
+          <button onClick={toggleMobileMenu} className="text-white">
+            <FaBars size={24} />
+          </button>
+        </div>
+
+        {/* Navbar links (visible on medium and larger screens) */}
+        <ul className={`md:flex space-x-6 ${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex`}>
           <li>
             <Link to="/" className="text-white hover:text-[#FFD700]">Home</Link>
           </li>
@@ -116,6 +135,15 @@ function Navbar2() {
                   >
                     Settings
                   </Link>
+                </li>
+                {/* Sign Out Link */}
+                <li>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-[#f0f0f0] hover:text-[#003366]"
+                  >
+                    Sign Out
+                  </button>
                 </li>
               </ul>
             </div>

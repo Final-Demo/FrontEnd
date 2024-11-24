@@ -81,8 +81,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-10 rounded-2xl shadow-lg w-96">
+    <div className="flex justify-center items-center bg-white">
+      <div className=" bg-cyan-400 p-8 rounded-3xl shadow-xl w-[40%] max-w-2xl">
         <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">Create Your Account</h2>
 
         {/* Display error messages */}
@@ -93,7 +93,7 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit}>
           {/* First Name field */}
           <div className="mb-6">
-            <label htmlFor="firstName" className="block text-lg font-medium text-gray-700">First Name</label>
+            <label htmlFor="firstName" className="block text-lg font-medium text-black">First Name</label>
             <input
               type="text"
               id="firstName"
@@ -107,7 +107,7 @@ const RegisterPage = () => {
 
           {/* Last Name field */}
           <div className="mb-6">
-            <label htmlFor="lastName" className="block text-lg font-medium text-gray-700">Last Name</label>
+            <label htmlFor="lastName" className="block text-lg font-medium text-black">Last Name</label>
             <input
               type="text"
               id="lastName"
@@ -121,7 +121,7 @@ const RegisterPage = () => {
 
           {/* Email field */}
           <div className="mb-6">
-            <label htmlFor="email" className="block text-lg font-medium text-gray-700">Email Address</label>
+            <label htmlFor="email" className="block text-lg font-medium text-black">Email Address</label>
             <input
               type="email"
               id="email"
@@ -135,7 +135,7 @@ const RegisterPage = () => {
 
           {/* Password field */}
           <div className="mb-6">
-            <label htmlFor="password" className="block text-lg font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-lg font-medium text-black">Password</label>
             <input
               type="password"
               id="password"
@@ -149,7 +149,7 @@ const RegisterPage = () => {
 
           {/* Phone Number field */}
           <div className="mb-8">
-            <label htmlFor="phoneNumber" className="block text-lg font-medium text-gray-700">Phone Number</label>
+            <label htmlFor="phoneNumber" className="block text-lg font-medium text-black">Phone Number</label>
             <input
               type="text"
               id="phoneNumber"
@@ -174,7 +174,7 @@ const RegisterPage = () => {
         {/* Optional: Link to the Login page */}
         <p className="text-sm text-center mt-6">
           Already have an account?{" "}
-          <a href="/login" className="text-indigo-600 hover:text-indigo-800">
+          <a href="/login" className="text-white hover:text-black">
             Login here
           </a>
         </p>

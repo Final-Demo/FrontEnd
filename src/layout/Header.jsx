@@ -16,12 +16,16 @@ const Header = () => {
 
           {/* Email */}
           <div className="flex items-center space-x-3">
-            <a href="mailto:support@example.com" className="text-sm text-yellow-300 hover:text-yellow-400">
+            <a
+              href="mailto:support@example.com"
+              className="text-sm text-yellow-300 hover:text-yellow-400"
+              aria-label="Email support"
+            >
               rentfourme@outlook.com
             </a>
           </div>
 
-          {/* Quick Links (Example: Business Hours) */}
+          {/* Quick Links (Business Hours) */}
           <div className="hidden sm:flex items-center space-x-3">
             <span className="text-sm">Mon - Fri: 9 AM - 6 PM</span>
             <span className="text-sm">Sat: 10 AM - 4 PM</span>
@@ -35,6 +39,7 @@ const Header = () => {
               type="text"
               className="pl-6 text-center px-4 py-2 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500" // Focus ring color changed to yellow
               placeholder="Search apartments..."
+              aria-label="Search apartments"
             />
             <button className="absolute left-20 top-1/2 transform -translate-y-1/2">
               <FaSearch size={20} className="text-yellow-500" /> {/* Yellow icon */}
@@ -44,8 +49,8 @@ const Header = () => {
 
         {/* Right section: Login, Register, etc. */}
         <div className="hidden sm:flex items-center space-x-6">
-          <a href="/login" className="text-sm hover:text-yellow-400">Login</a> {/* Yellow hover text */}
-          <a href="/register" className="text-sm hover:text-yellow-400">Register</a> {/* Yellow hover text */}
+          <a href="/login" className="text-sm hover:text-yellow-400" aria-label="Login">Login</a>
+          <a href="/register" className="text-sm hover:text-yellow-400" aria-label="Register">Register</a>
         </div>
       </div>
     </header>
