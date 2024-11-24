@@ -4,10 +4,10 @@ import { FaPhoneAlt, FaSearch } from 'react-icons/fa'; // Importing icons for ph
 const Header = () => {
   return (
     <header className="bg-yellow-800 text-white py-4"> {/* Dark Yellow background */}
-      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center px-4 sm:px-6">
         
         {/* Left section: Phone Numbers, Email & Quick Links */}
-        <div className="flex items-center space-x-6">
+        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
           {/* Phone Numbers */}
           <div className="flex items-center space-x-3">
             <FaPhoneAlt size={20} className="text-yellow-500" /> {/* Yellow icon */}
@@ -33,7 +33,7 @@ const Header = () => {
         </div>
 
         {/* Middle section: Search Bar */}
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center mt-4 sm:mt-0">
           <div className="relative w-full text-center max-w-md"> {/* Reduced max width here */}
             <input
               type="text"

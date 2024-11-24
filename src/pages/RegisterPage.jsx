@@ -81,9 +81,9 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-white">
-      <div className=" bg-cyan-400 p-8 rounded-3xl shadow-xl w-[40%] max-w-2xl">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">Create Your Account</h2>
+    <div className="flex justify-center items-center bg-white p-4">
+      <div className="bg-cyan-400 p-8 rounded-3xl shadow-xl w-full max-w-4xl">
+        <h2 className="text-3xl md:text-2xl font-semibold text-center text-gray-800 mb-8">Create Your Account</h2>
 
         {/* Display error messages */}
         {Object.values(errors).map((error, index) => (

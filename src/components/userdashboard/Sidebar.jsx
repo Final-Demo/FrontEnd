@@ -24,9 +24,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/my-apartments" className="flex items-center py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+              <Link to="/mybookings" className="flex items-center py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
                 <FontAwesomeIcon icon={faHome} className="text-lg" />
-                <span className="ml-4">My Apartments</span>
+                <span className="ml-4">My Bookings</span>
               </Link>
             </li>
             <li>

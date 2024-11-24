@@ -39,14 +39,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
       <div className="flex flex-col md:flex-row max-w-4xl w-full p-8 bg-white shadow-2xl rounded-3xl backdrop-blur-lg bg-opacity-20">
-        <div className="w-full md:w-1/2 p-10">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-10">Welcome Back</h2>
+        {/* Form Section */}
+        <div className="w-full md:w-1/2 p-6 md:p-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">Welcome Back</h2>
           {error && <ErrorMessage message={error} />}
           {success && <SuccessMessage message={success} />}
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="mb-6">
               <label htmlFor="email" className="block text-lg font-medium text-gray-800">Email</label>
               <input 
@@ -89,12 +90,13 @@ const LoginForm = () => {
           </div>
         </div>
 
+        {/* Background Image Section */}
         <div className="hidden md:block md:w-1/2 bg-cover bg-center rounded-r-3xl"
              style={{ backgroundImage: `url(${RentbgImg})`, minHeight: '400px' }}>
-          <div className="flex items-center justify-center h-full bg-black bg-opacity-50 text-white p-8">
+          <div className="flex items-center justify-center h-full bg-black bg-opacity-50 text-white p-6 md:p-8">
             <div>
-              <h3 className="text-2xl font-semibold mb-4">Welcome to RentEase</h3>
-              <p className="text-lg">Find the perfect apartment for you. Browse listings, book tours, and manage your preferences, all in one place.</p>
+              <h3 className="text-lg md:text-2xl font-semibold mb-4">Welcome to RentEase</h3>
+              <p className="text-sm md:text-lg">Find the perfect apartment for you. Browse listings, book tours, and manage your preferences, all in one place.</p>
             </div>
           </div>
         </div>

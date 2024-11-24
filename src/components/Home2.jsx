@@ -64,7 +64,7 @@ const Home2 = () => {
     <div className="font-sans bg-gray-100">
       {/* Hero Section with Catchy Statement */}
       <section className="relative w-full overflow-hidden">
-        <div className="w-full h-full mt-4">
+        <div className="w-full h-[400px] sm:h-[500px] md:h-[600px]">
           <img
             src="https://www.shutterstock.com/image-photo/happy-young-man-holding-keys-600nw-2481559719.jpg"
             alt="Hero 2"
@@ -75,15 +75,15 @@ const Home2 = () => {
 
         {/* Catchy Statement and Buttons */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white z-10 px-4 sm:px-8">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6">
             Find Your Dream Home with Rent4Me
           </h1>
-          <p className="text-lg sm:text-xl mb-8">
+          <p className="text-base sm:text-lg mb-8">
             Discover a wide range of apartments and houses waiting just for you!
           </p>
 
           {/* Flex container for buttons */}
-          <div className="flex space-x-4 mt-4">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
             {/* First Button: Add Apartment */}
             <Link 
               to="/add-apartment" 
@@ -125,7 +125,7 @@ const Home2 = () => {
                   <img
                     src={apartment.imageUrl || 'https://essexmeadows.com/wp-content/uploads/shutterstock_630857810-1.jpg'}  // Fallback to a default image if not provided
                     alt={apartment.title || 'Apartment Image'}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 sm:h-56 object-cover"
                   />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-800">{apartment.title || 'No title available'}</h3>

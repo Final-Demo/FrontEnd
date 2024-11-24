@@ -1,4 +1,3 @@
-// src/components/Navbar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for routing
 import { FaBars, FaTimes } from 'react-icons/fa'; // Hamburger and close icons
@@ -13,6 +12,7 @@ function Navbar() {
   return (
     <nav className="bg-[#003366] p-4"> {/* Navy Blue background */}
       <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
         <div className="text-white text-xl font-bold">
           <Link to="/">Rent4Me</Link>
         </div>
@@ -25,7 +25,11 @@ function Navbar() {
         </div>
 
         {/* Navigation Links */}
-        <ul className={`flex space-x-6 md:flex ${isMenuOpen ? 'flex-col absolute bg-[#003366] w-full top-16 left-0 p-4' : 'hidden md:flex'}`}>
+        <ul
+          className={`${
+            isMenuOpen ? 'flex-col absolute bg-[#003366] w-full top-16 left-0 p-4' : 'hidden'
+          } md:flex md:flex-row md:space-x-6 md:items-center md:bg-transparent md:p-0`}
+        >
           <li>
             <Link to="/" className="text-white hover:text-[#FFD700]">Home</Link>
           </li>

@@ -56,7 +56,7 @@ const LoginPage = () => {
   
       if (response.ok) {
         localStorage.setItem("authToken", data.token); // Save token in localStorage
-        toast.success("Login successfull...");
+        toast.success("Login successful...");
         
         // Redirect to /home2 after a successful login
         setTimeout(() => {
@@ -74,20 +74,20 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex  justify-center items-center min-h-screen bg-white">
-      <div className="flex bg-cyan-400 p-8 rounded-3xl shadow-xl w-[60%] max-w-4xl">
+    <div className="flex justify-center items-center min-h-screen bg-white p-4">
+      <div className="flex flex-col md:flex-row bg-cyan-400 p-6 rounded-3xl shadow-xl w-full max-w-4xl">
         {/* Logo Section */}
-        <div className="flex-shrink-0 w-1/3 flex justify-center items-center">
+        <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center items-center mb-8 md:mb-0">
           <img 
             src="./src/assets/images/rent4melogo.jpg" // Replace with your logo path
             alt="Logo"
-            className="w-36 h-88 object-contain rounded-3xl shadow-orange-600"
+            className="w-36 h-36 md:w-44 md:h-44 object-contain rounded-3xl shadow-orange-600"
           />
         </div>
 
         {/* Login Form Section */}
-        <div className="w-1/2 ml-8 p-4">
-          <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        <div className="w-full md:w-2/3 md:ml-8 p-4">
+          <h2 className="text-3xl md:text-2xl font-semibold text-center mb-6">Login</h2>
           
           {errors.login && <p className="text-red-500 text-center mb-4">{errors.login}</p>}
 

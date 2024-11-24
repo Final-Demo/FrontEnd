@@ -39,9 +39,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/properties" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-all duration-200">
+              <Link to="/mybookings" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-all duration-200">
                 <FaList className="mr-3" />
-                {isSidebarHovered && <span>My Apartments</span>}
+                {isSidebarHovered && <span>My Bookings</span>}
               </Link>
             </li>
             <li>

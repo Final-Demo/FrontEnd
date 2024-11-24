@@ -29,6 +29,8 @@ import AddApartment from "./pages/AddApartment";
 
 import EmailVerification from "../src/components/auth/EmailVerification"; // Email verification page
 import Sidebar from "./components/userdashboard/Sidebar";
+import Profile from "./components/userdashboard/Profile";
+import MyBookings from "./components/dashboard/MyBookings";
 
 // ErrorBoundary Component (Optional)
 class ErrorBoundary extends React.Component {
@@ -44,7 +46,6 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     console.error("Error occurred:", error, errorInfo);
   }
-
   render() {
     if (this.state.hasError) {
       return (
@@ -99,6 +100,10 @@ const AppContent = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         {/* About Us Route */}
         <Route path="/about-us" element={<AboutUsPage />} />
+        {/* Profile Route*/}
+        <Route path="/profile" element={<Profile />} />
+        {/* My Booking Route*/}
+        <Route path="/mybookings" element={<MyBookings />} />
         {/* Dashboard Layout (without Header, Navbar, and Footer) */}
         <Route path="/dashboardlay" element={<DashboardLayout />} />
         {/* Apartment List */}

@@ -64,7 +64,7 @@ const Home = () => {
     <div className="font-sans bg-gray-100">
       {/* Hero Section with Catchy Statement */}
       <section className="relative w-full overflow-hidden">
-        <div className="w-full h-full mt-4">
+        <div className="w-full h-[400px] sm:h-[500px] md:h-[600px]">
           <img
             src="https://www.shutterstock.com/image-photo/happy-young-man-holding-keys-600nw-2481559719.jpg"
             alt="Hero 2"
@@ -73,24 +73,40 @@ const Home = () => {
         </div>
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
-        {/* Catchy Statement and Button */}
+        {/* Catchy Statement and Buttons */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white z-10 px-4 sm:px-8">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6">
             Find Your Dream Home with Rent4Me
           </h1>
-          <p className="text-lg sm:text-xl mb-8">
+          <p className="text-base sm:text-lg mb-8">
             Discover a wide range of apartments and houses waiting just for you!
           </p>
-          <Link to="/add-apartment" className="inline-block py-3 px-6 bg-yellow-500 text-white font-semibold rounded-full hover:bg-yellow-600 transition-all">
-            Add Apartment
-          </Link>
+
+          {/* Flex container for buttons */}
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+            {/* First Button: Add Apartment */}
+            <Link 
+              to="/add-apartment" 
+              className="inline-block py-3 px-6 bg-yellow-600 text-white font-semibold rounded-full hover:bg-yellow-700 transition-all"
+            >
+              Add Apartment
+            </Link>
+
+            {/* Second Button: View Apartments */}
+            <Link 
+              to="/apartmentlist" 
+              className="inline-block py-3 px-6 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all"
+            >
+              View Apartments
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Available Apartments Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-8">Available Apartments</h2>
+          <h2 className="text-3xl font-semibold mb-8 text-blue-900">Available Apartments</h2>
 
           {/* Loading and Error Handling */}
           {loading && <div>Loading apartments...</div>}
@@ -109,15 +125,17 @@ const Home = () => {
                   <img
                     src={apartment.imageUrl || 'https://essexmeadows.com/wp-content/uploads/shutterstock_630857810-1.jpg'}  // Fallback to a default image if not provided
                     alt={apartment.title || 'Apartment Image'}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 sm:h-56 object-cover"
                   />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-800">{apartment.title || 'No title available'}</h3>
                     <p className="text-lg text-gray-600 mb-4">${apartment.price || 'Price not available'}</p>
                     <p className="text-sm text-gray-500 mb-4">{apartment.location || 'Location not available'}</p>
+
+                    {/* View Details Button */}
                     <Link
-                      to={`/apartmentdetail/${apartment.id}`} 
-                      className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-200"
+                      to={`/apartmentlist`} 
+                      className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-200"
                     >
                       View Details
                     </Link>
