@@ -86,8 +86,16 @@ function Navbar2() {
     <nav className="bg-[#003366] p-4 fixed top-0 left-0 w-full z-50 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div className="text-white text-xl font-bold">
-          <Link to="/">Rent4Me</Link>
+        <div className="flex flex-row items-center">
+          {/* Logo Image */}
+          <Link to="/">
+            <img 
+              src="src/assets/images/rent4melogo.jpg" // Replace with the actual path to your logo
+              alt="Logo" 
+              className="w-10 h-auto" // Adjust size as needed
+            />
+          </Link>
+          <h1 className='ml-2 text-white rounded-2xl font-bold'>RENT-4ME</h1>
         </div>
 
         {/* Hamburger icon for mobile */}
