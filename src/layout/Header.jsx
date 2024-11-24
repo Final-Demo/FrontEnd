@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPhoneAlt, FaSearch } from 'react-icons/fa'; // Importing icons for phone and search
+import { FaPhoneAlt, FaSearch, FaUser, FaSignInAlt } from 'react-icons/fa'; // Added icons for Login and Register
 
 const Header = () => {
   return (
@@ -32,8 +32,8 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Middle section: Search Bar */}
-        <div className="flex-1 flex justify-center mt-4 sm:mt-0">
+        {/* Middle section: Search Bar (Visible on larger screens) */}
+        <div className="hidden sm:flex-1 sm:flex justify-center mt-4 sm:mt-0">
           <div className="relative w-full text-center max-w-md"> {/* Reduced max width here */}
             <input
               type="text"
@@ -51,6 +51,16 @@ const Header = () => {
         <div className="hidden sm:flex items-center space-x-6">
           <a href="/login" className="text-sm hover:text-yellow-400" aria-label="Login">Login</a>
           <a href="/register" className="text-sm hover:text-yellow-400" aria-label="Register">Register</a>
+        </div>
+
+        {/* Mobile section: Icons for Login and Register (visible on smaller screens) */}
+        <div className="flex sm:hidden items-center space-x-4">
+          <a href="/login" aria-label="Login">
+            <FaSignInAlt size={24} className="text-yellow-500 hover:text-yellow-400" />
+          </a>
+          <a href="/register" aria-label="Register">
+            <FaUser size={24} className="text-yellow-500 hover:text-yellow-400" />
+          </a>
         </div>
       </div>
     </header>
